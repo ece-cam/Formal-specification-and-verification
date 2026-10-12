@@ -1,4 +1,4 @@
----------------------------- MODULE trash_single ----------------------------
+Assignment 2: translate and verify---------------------------- MODULE trash_single ----------------------------
 
 EXTENDS trash_data
 
@@ -274,13 +274,31 @@ end process;
 \*****************************
 \* Process for a truck
 \*****************************
-\* DUMMY truck process type.
-\* Remodel it to react to requests and empty the trash bin!
+\* Section 4.2: receive a request, travel, empty the bin, and acknowledge.
+\* The intermediate commands describe the truck's progress. The supplied
+\* controller only sends "request" and observes the final "emptied" status.
 fair process truckProcess \in Trucks
 begin
-  TruckStart:
-    \* Implement behaviour
-    skip;
+  TruckWaitForRequest:
+    while TRUE do
+      await truckCommand.command = "request";
+      assert truckCommand.bin = 1;
+  TruckDriveToBin:
+      \* Travel takes a separate step, during which scans can be handled.
+      truckCommand.command := "arrived";
+  TruckStartEmptying:
+      \* Wait for a safe, idle bin; only binProcess changes the hardware.
+      await binCommand.command = "finished";
+      await outerDoorLocked /\ ~outerDoorOpen;
+      await ~trapDoorOpen /\ ~ramExtended;
+      await trashInTop = 0 /\ trashUncompressed = 0;
+      truckCommand.command := "start_emptying";
+      binCommand := [command |-> "empty", open |-> FALSE];
+  TruckAwaitEmptied:
+      \* Acknowledge completion only after the bin has executed the command.
+      await binCommand.command = "finished";
+      truckCommand.command := "emptied";
+    end while;
 end process;
 
 
@@ -358,11 +376,11 @@ end process;
 
 
 end algorithm; *)
-\* BEGIN TRANSLATION (chksum(pcal) = "27282ec4" /\ chksum(tla) = "6a12d24")
-VARIABLES pc, outerDoorOpen, outerDoorLocked, trapDoorOpen, ramExtended, 
+\* BEGIN TRANSLATION (chksum(pcal) = "ab52dceb" /\ chksum(tla) = "8bbde727")
+VARIABLES outerDoorOpen, outerDoorLocked, trapDoorOpen, ramExtended, 
           trashInTop, trashCompressed, trashUncompressed, trashCapacity, 
           trapDestroyed, userTrash, binCommand, binSensor, scans, permissions, 
-          serverRequests, serverResponses, truckCommand
+          serverRequests, serverResponses, truckCommand, pc
 
 (* define statement *)
 Trash == trashCompressed + trashUncompressed
@@ -444,11 +462,11 @@ TruckEmpties == truckCommand.command = "request" ~> truckCommand.command = "empt
 
 VARIABLES perm, req, currentScan, serverResponse, requestGranted
 
-vars == << pc, outerDoorOpen, outerDoorLocked, trapDoorOpen, ramExtended, 
+vars == << outerDoorOpen, outerDoorLocked, trapDoorOpen, ramExtended, 
            trashInTop, trashCompressed, trashUncompressed, trashCapacity, 
            trapDestroyed, userTrash, binCommand, binSensor, scans, 
-           permissions, serverRequests, serverResponses, truckCommand, perm, 
-           req, currentScan, serverResponse, requestGranted >>
+           permissions, serverRequests, serverResponses, truckCommand, pc, 
+           perm, req, currentScan, serverResponse, requestGranted >>
 
 ProcSet == (Bins) \cup (Users) \cup {Server} \cup (Trucks) \cup {Control}
 
@@ -481,7 +499,7 @@ Init == (* Global variables *)
         /\ pc = [self \in ProcSet |-> CASE self \in Bins -> "BinWaitForCommand"
                                         [] self \in Users -> "UserNextIteration"
                                         [] self = Server -> "ServerNextIteration"
-                                        [] self \in Trucks -> "TruckStart"
+                                        [] self \in Trucks -> "TruckWaitForRequest"
                                         [] self = Control -> "ControlStart"]
 
 BinWaitForCommand(self) == /\ pc[self] = "BinWaitForCommand"
@@ -753,19 +771,71 @@ ServerAwaitRequest == /\ pc[Server] = "ServerAwaitRequest"
 
 serverProcess == ServerNextIteration \/ ServerAwaitRequest
 
-TruckStart(self) == /\ pc[self] = "TruckStart"
-                    /\ TRUE
-                    /\ pc' = [pc EXCEPT ![self] = "Done"]
-                    /\ UNCHANGED << outerDoorOpen, outerDoorLocked, 
-                                    trapDoorOpen, ramExtended, trashInTop, 
-                                    trashCompressed, trashUncompressed, 
-                                    trashCapacity, trapDestroyed, userTrash, 
-                                    binCommand, binSensor, scans, permissions, 
-                                    serverRequests, serverResponses, 
-                                    truckCommand, perm, req, currentScan, 
-                                    serverResponse, requestGranted >>
+TruckWaitForRequest(self) == /\ pc[self] = "TruckWaitForRequest"
+                             /\ truckCommand.command = "request"
+                             /\ Assert(truckCommand.bin = 1, 
+                                       "Failure of assertion at line 285, column 7.")
+                             /\ pc' = [pc EXCEPT ![self] = "TruckDriveToBin"]
+                             /\ UNCHANGED << outerDoorOpen, outerDoorLocked, 
+                                             trapDoorOpen, ramExtended, 
+                                             trashInTop, trashCompressed, 
+                                             trashUncompressed, trashCapacity, 
+                                             trapDestroyed, userTrash, 
+                                             binCommand, binSensor, scans, 
+                                             permissions, serverRequests, 
+                                             serverResponses, truckCommand, 
+                                             perm, req, currentScan, 
+                                             serverResponse, requestGranted >>
 
-truckProcess(self) == TruckStart(self)
+TruckDriveToBin(self) == /\ pc[self] = "TruckDriveToBin"
+                         /\ truckCommand' = [truckCommand EXCEPT !.command = "arrived"]
+                         /\ pc' = [pc EXCEPT ![self] = "TruckStartEmptying"]
+                         /\ UNCHANGED << outerDoorOpen, outerDoorLocked, 
+                                         trapDoorOpen, ramExtended, trashInTop, 
+                                         trashCompressed, trashUncompressed, 
+                                         trashCapacity, trapDestroyed, 
+                                         userTrash, binCommand, binSensor, 
+                                         scans, permissions, serverRequests, 
+                                         serverResponses, perm, req, 
+                                         currentScan, serverResponse, 
+                                         requestGranted >>
+
+TruckStartEmptying(self) == /\ pc[self] = "TruckStartEmptying"
+                            /\ binCommand.command = "finished"
+                            /\ outerDoorLocked /\ ~outerDoorOpen
+                            /\ ~trapDoorOpen /\ ~ramExtended
+                            /\ trashInTop = 0 /\ trashUncompressed = 0
+                            /\ truckCommand' = [truckCommand EXCEPT !.command = "start_emptying"]
+                            /\ binCommand' = [command |-> "empty", open |-> FALSE]
+                            /\ pc' = [pc EXCEPT ![self] = "TruckAwaitEmptied"]
+                            /\ UNCHANGED << outerDoorOpen, outerDoorLocked, 
+                                            trapDoorOpen, ramExtended, 
+                                            trashInTop, trashCompressed, 
+                                            trashUncompressed, trashCapacity, 
+                                            trapDestroyed, userTrash, 
+                                            binSensor, scans, permissions, 
+                                            serverRequests, serverResponses, 
+                                            perm, req, currentScan, 
+                                            serverResponse, requestGranted >>
+
+TruckAwaitEmptied(self) == /\ pc[self] = "TruckAwaitEmptied"
+                           /\ binCommand.command = "finished"
+                           /\ truckCommand' = [truckCommand EXCEPT !.command = "emptied"]
+                           /\ pc' = [pc EXCEPT ![self] = "TruckWaitForRequest"]
+                           /\ UNCHANGED << outerDoorOpen, outerDoorLocked, 
+                                           trapDoorOpen, ramExtended, 
+                                           trashInTop, trashCompressed, 
+                                           trashUncompressed, trashCapacity, 
+                                           trapDestroyed, userTrash, 
+                                           binCommand, binSensor, scans, 
+                                           permissions, serverRequests, 
+                                           serverResponses, perm, req, 
+                                           currentScan, serverResponse, 
+                                           requestGranted >>
+
+truckProcess(self) == TruckWaitForRequest(self) \/ TruckDriveToBin(self)
+                         \/ TruckStartEmptying(self)
+                         \/ TruckAwaitEmptied(self)
 
 ControlStart == /\ pc[Control] = "ControlStart"
                 /\ pc' = [pc EXCEPT ![Control] = "ProcessUserScans"]

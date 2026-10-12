@@ -1,0 +1,7 @@
+# Generated checker state files and translator backups.
+states/
+*.old
+*.out
+*_TTrace_*.tla
+*_TTrace_*.cfg
+.vscode/tlc/

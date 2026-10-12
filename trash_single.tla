@@ -1,4 +1,4 @@
-Assignment 2: translate and verify---------------------------- MODULE trash_single ----------------------------
+---------------------------- MODULE trash_single ----------------------------
 
 EXTENDS trash_data
 

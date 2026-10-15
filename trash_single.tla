@@ -391,20 +391,12 @@ end process;
 
 
 end algorithm; *)
-<<<<<<< HEAD
-\* BEGIN TRANSLATION (chksum(pcal) = "df389a4e" /\ chksum(tla) = "8743d45b")
+\* BEGIN TRANSLATION (chksum(pcal) = "532bab10" /\ chksum(tla) = "d4d10ccf")
 VARIABLES pc, outerDoorOpen, outerDoorLocked, trapDoorOpen, ramExtended, 
-          trashInTop, trashCompressed, trashUncompressed, trashCapacity, 
-          trapDestroyed, userTrash, binCommand, binSensor, scans, permissions, 
-          serverRequests, serverResponses, truckCommand
-=======
-\* BEGIN TRANSLATION (chksum(pcal) = "ab4a1bd1" /\ chksum(tla) = "204ac238")
-VARIABLES outerDoorOpen, outerDoorLocked, trapDoorOpen, ramExtended, 
           trashInTop, trashCompressed, trashUncompressed, trashCapacity, 
           trapDestroyed, userTrash, grantedUser, doorUser, binCommand, 
           binSensor, scans, permissions, serverRequests, serverResponses, 
-          truckCommand, pc
->>>>>>> 1af977c1648e4f94f98075bc0d864ab76d6927db
+          truckCommand
 
 (* define statement *)
 Trash == trashCompressed + trashUncompressed
@@ -493,16 +485,10 @@ VARIABLES perm, req, currentScan, serverResponse, requestGranted
 
 vars == << pc, outerDoorOpen, outerDoorLocked, trapDoorOpen, ramExtended, 
            trashInTop, trashCompressed, trashUncompressed, trashCapacity, 
-<<<<<<< HEAD
-           trapDestroyed, userTrash, binCommand, binSensor, scans, 
-           permissions, serverRequests, serverResponses, truckCommand, perm, 
-           req, currentScan, serverResponse, requestGranted >>
-=======
            trapDestroyed, userTrash, grantedUser, doorUser, binCommand, 
            binSensor, scans, permissions, serverRequests, serverResponses, 
-           truckCommand, pc, perm, req, currentScan, serverResponse, 
+           truckCommand, perm, req, currentScan, serverResponse, 
            requestGranted >>
->>>>>>> 1af977c1648e4f94f98075bc0d864ab76d6927db
 
 ProcSet == (Bins) \cup (Users) \cup {Server} \cup (Trucks) \cup {Control}
 

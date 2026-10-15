@@ -255,7 +255,7 @@ end process;
 \*****************************
 \* Process for a user
 \*****************************
-fair process userProcess \in Users
+fair+ process userProcess \in Users
 variables
   perm = [user |-> 0, bin |-> 0, granted |-> FALSE],
   selectedBin = 0
@@ -349,7 +349,7 @@ end process;
 \* Deposits are serialized; trucks and card scanning proceed concurrently.
 \* Pending collections get priority when a truck is available. Otherwise
 \* the next scan is handled, including a negative response for a full bin.
-fair process controlProcess = Control
+fair+ process controlProcess = Control
 variables
   currentScan = [user |-> 0, bin |-> 0],
   serverResponse = [user |-> 0, permission |-> FALSE]
@@ -368,10 +368,19 @@ begin
   ControlValidation:
         read(serverResponses, serverResponse);
         assert serverResponse.user = currentScan.user;
-        if serverResponse.permission
-           /\ TrashFitsCapacity(currentScan.bin, MaxUserTrash)
-           /\ ~Collecting(currentScan.bin) /\ ~Queued(currentScan.bin) then
-          await binCommand[currentScan.bin].command = "finished";
+        if serverResponse.permission then
+  ControlAwaitBinReady:
+          \* If the requested bin is waiting for a truck, dispatch one if available
+          if Queued(currentScan.bin) /\ AvailableTrucks /= {} then
+            with t = FirstAvailableTruck do
+              truckCommand[t] := [command |-> "request", bin |-> Head(pendingBins)];
+              pendingBins := Tail(pendingBins);
+            end with;
+          end if;
+          \* Wait until the bin is not being emptied and has space
+          await ~Collecting(currentScan.bin) /\ ~Queued(currentScan.bin)
+                /\ TrashFitsCapacity(currentScan.bin, MaxUserTrash)
+                /\ binCommand[currentScan.bin].command = "finished";
           binCommand[currentScan.bin] := [command |-> "change_outer_lock", open |-> TRUE];
   ControlGrant:
           await binCommand[currentScan.bin].command = "finished";
@@ -411,12 +420,12 @@ begin
 end process;
 
 end algorithm; *)
-\* BEGIN TRANSLATION (chksum(pcal) = "cc6e8f0e" /\ chksum(tla) = "86940fd3")
-VARIABLES outerDoorOpen, outerDoorLocked, trapDoorOpen, ramExtended, 
+\* BEGIN TRANSLATION (chksum(pcal) = "8e8c26cd" /\ chksum(tla) = "5531d308")
+VARIABLES pc, outerDoorOpen, outerDoorLocked, trapDoorOpen, ramExtended, 
           trashInTop, trashCompressed, trashUncompressed, trashCapacity, 
           trapDestroyed, userTrash, grantedUser, doorUser, pendingBins, 
           binCommand, binSensor, scans, permissions, serverRequests, 
-          serverResponses, truckCommand, pc
+          serverResponses, truckCommand
 
 (* define statement *)
 Trash(bin) == trashCompressed[bin] + trashUncompressed[bin]
@@ -535,12 +544,12 @@ CollectionExclusive ==
 
 VARIABLES perm, selectedBin, req, currentScan, serverResponse
 
-vars == << outerDoorOpen, outerDoorLocked, trapDoorOpen, ramExtended, 
+vars == << pc, outerDoorOpen, outerDoorLocked, trapDoorOpen, ramExtended, 
            trashInTop, trashCompressed, trashUncompressed, trashCapacity, 
            trapDestroyed, userTrash, grantedUser, doorUser, pendingBins, 
            binCommand, binSensor, scans, permissions, serverRequests, 
-           serverResponses, truckCommand, pc, perm, selectedBin, req, 
-           currentScan, serverResponse >>
+           serverResponses, truckCommand, perm, selectedBin, req, currentScan, 
+           serverResponse >>
 
 ProcSet == (Bins) \cup (Users) \cup {Server} \cup (Trucks) \cup {Control}
 
@@ -957,23 +966,40 @@ ControlValidation == /\ pc[Control] = "ControlValidation"
                      /\ Assert(serverResponse'.user = currentScan.user, 
                                "Failure of assertion at line 370, column 9.")
                      /\ IF serverResponse'.permission
-                           /\ TrashFitsCapacity(currentScan.bin, MaxUserTrash)
-                           /\ ~Collecting(currentScan.bin) /\ ~Queued(currentScan.bin)
-                           THEN /\ binCommand[currentScan.bin].command = "finished"
-                                /\ binCommand' = [binCommand EXCEPT ![currentScan.bin] = [command |-> "change_outer_lock", open |-> TRUE]]
-                                /\ pc' = [pc EXCEPT ![Control] = "ControlGrant"]
+                           THEN /\ pc' = [pc EXCEPT ![Control] = "ControlAwaitBinReady"]
                                 /\ UNCHANGED permissions
                            ELSE /\ permissions' = [permissions EXCEPT ![currentScan.user] = Append((permissions[currentScan.user]), ([user |-> currentScan.user, bin |-> currentScan.bin, granted |-> FALSE]))]
                                 /\ pc' = [pc EXCEPT ![Control] = "ControlNext"]
-                                /\ UNCHANGED binCommand
                      /\ UNCHANGED << outerDoorOpen, outerDoorLocked, 
                                      trapDoorOpen, ramExtended, trashInTop, 
                                      trashCompressed, trashUncompressed, 
                                      trashCapacity, trapDestroyed, userTrash, 
                                      grantedUser, doorUser, pendingBins, 
-                                     binSensor, scans, serverRequests, 
-                                     truckCommand, perm, selectedBin, req, 
-                                     currentScan >>
+                                     binCommand, binSensor, scans, 
+                                     serverRequests, truckCommand, perm, 
+                                     selectedBin, req, currentScan >>
+
+ControlAwaitBinReady == /\ pc[Control] = "ControlAwaitBinReady"
+                        /\ IF Queued(currentScan.bin) /\ AvailableTrucks /= {}
+                              THEN /\ LET t == FirstAvailableTruck IN
+                                        /\ truckCommand' = [truckCommand EXCEPT ![t] = [command |-> "request", bin |-> Head(pendingBins)]]
+                                        /\ pendingBins' = Tail(pendingBins)
+                              ELSE /\ TRUE
+                                   /\ UNCHANGED << pendingBins, truckCommand >>
+                        /\ ~Collecting(currentScan.bin) /\ ~Queued(currentScan.bin)
+                           /\ TrashFitsCapacity(currentScan.bin, MaxUserTrash)
+                           /\ binCommand[currentScan.bin].command = "finished"
+                        /\ binCommand' = [binCommand EXCEPT ![currentScan.bin] = [command |-> "change_outer_lock", open |-> TRUE]]
+                        /\ pc' = [pc EXCEPT ![Control] = "ControlGrant"]
+                        /\ UNCHANGED << outerDoorOpen, outerDoorLocked, 
+                                        trapDoorOpen, ramExtended, trashInTop, 
+                                        trashCompressed, trashUncompressed, 
+                                        trashCapacity, trapDestroyed, 
+                                        userTrash, grantedUser, doorUser, 
+                                        binSensor, scans, permissions, 
+                                        serverRequests, serverResponses, perm, 
+                                        selectedBin, req, currentScan, 
+                                        serverResponse >>
 
 ControlGrant == /\ pc[Control] = "ControlGrant"
                 /\ binCommand[currentScan.bin].command = "finished"
@@ -1069,7 +1095,7 @@ ControlAwaitTrapClose == /\ pc[Control] = "ControlAwaitTrapClose"
                          /\ binSensor' = [binSensor EXCEPT ![currentScan.bin] = [sensor |-> "idle"]]
                          /\ IF ~TrashFitsCapacity(currentScan.bin, MaxUserTrash)
                                THEN /\ Assert(~Queued(currentScan.bin) /\ ~Collecting(currentScan.bin), 
-                                              "Failure of assertion at line 402, column 13.")
+                                              "Failure of assertion at line 411, column 13.")
                                     /\ pendingBins' = Append(pendingBins, (currentScan.bin))
                                ELSE /\ TRUE
                                     /\ UNCHANGED pendingBins
@@ -1084,10 +1110,11 @@ ControlAwaitTrapClose == /\ pc[Control] = "ControlAwaitTrapClose"
                                          truckCommand, perm, selectedBin, req, 
                                          currentScan, serverResponse >>
 
-controlProcess == ControlNext \/ ControlValidation \/ ControlGrant
-                     \/ ControlAwaitDoor \/ ControlAwaitLock
-                     \/ ControlAwaitTrapOpen \/ ControlAwaitRamExtend
-                     \/ ControlAwaitRamRetract \/ ControlAwaitTrapClose
+controlProcess == ControlNext \/ ControlValidation \/ ControlAwaitBinReady
+                     \/ ControlGrant \/ ControlAwaitDoor
+                     \/ ControlAwaitLock \/ ControlAwaitTrapOpen
+                     \/ ControlAwaitRamExtend \/ ControlAwaitRamRetract
+                     \/ ControlAwaitTrapClose
 
 Next == serverProcess \/ controlProcess
            \/ (\E self \in Bins: binProcess(self))
@@ -1096,10 +1123,10 @@ Next == serverProcess \/ controlProcess
 
 Spec == /\ Init /\ [][Next]_vars
         /\ \A self \in Bins : WF_vars(binProcess(self))
-        /\ \A self \in Users : WF_vars(userProcess(self))
+        /\ \A self \in Users : SF_vars(userProcess(self))
         /\ WF_vars(serverProcess)
         /\ \A self \in Trucks : WF_vars(truckProcess(self))
-        /\ WF_vars(controlProcess)
+        /\ SF_vars(controlProcess)
 
 \* END TRANSLATION 
 

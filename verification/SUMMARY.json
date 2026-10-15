@@ -1,0 +1,14 @@
+{
+  "checks": 20,
+  "allExpectedResultsObserved": true,
+  "pdfBytes": 24825,
+  "zipBytes": 45020,
+  "zipEntries": 33,
+  "coreSourceHashes": {
+    "trash_data.tla": "24f34044deadc6246204b892991a84e5a56c675ad05a78e3f091f524218c90a8",
+    "trash_single.tla": "308e133a9f3f4082a9c800a716b83c252098573ce672b6535d3aa3f36b563ff7",
+    "trash_bins.tla": "cb01d20876c5f467bfb62b5bdd69b9be440227a6cc337801ef950408ad7ff6a6",
+    "trash_multiple.tla": "5f79873bebd93a210e4932d3e53ea2640a19a8692e7dd6603ba6fadc9faa1ff1"
+  },
+  "reflectionRequiresTeamInput": true
+}

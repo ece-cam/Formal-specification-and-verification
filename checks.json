@@ -1,0 +1,144 @@
+[
+  {
+    "name": "trash_single",
+    "module": "trash_single",
+    "config": "trash_single.cfg",
+    "expected": "pass",
+    "group": "single"
+  },
+  {
+    "name": "multiple_bins",
+    "module": "trash_multiple",
+    "config": "multiple_bins.cfg",
+    "expected": "pass",
+    "group": "multiple"
+  },
+  {
+    "name": "multiple_users",
+    "module": "trash_multiple",
+    "config": "multiple_users.cfg",
+    "expected": "temporal",
+    "group": "multiple"
+  },
+  {
+    "name": "multiple_users_other",
+    "module": "trash_multiple",
+    "config": "multiple_users_other.cfg",
+    "expected": "pass",
+    "group": "multiple"
+  },
+  {
+    "name": "multiple_trucks",
+    "module": "trash_multiple",
+    "config": "multiple_trucks.cfg",
+    "expected": "pass",
+    "group": "multiple"
+  },
+  {
+    "name": "unfair_TrashEmptied",
+    "module": "trash_single",
+    "config": "investigations/unfair_TrashEmptied.cfg",
+    "expected": "temporal",
+    "group": "unfair"
+  },
+  {
+    "name": "unfair_UserTrash",
+    "module": "trash_single",
+    "config": "investigations/unfair_UserTrash.cfg",
+    "expected": "temporal",
+    "group": "unfair"
+  },
+  {
+    "name": "unfair_UserTrashDeposited",
+    "module": "trash_single",
+    "config": "investigations/unfair_UserTrashDeposited.cfg",
+    "expected": "temporal",
+    "group": "unfair"
+  },
+  {
+    "name": "unfair_TruckEmpties",
+    "module": "trash_single",
+    "config": "investigations/unfair_TruckEmpties.cfg",
+    "expected": "temporal",
+    "group": "unfair"
+  },
+  {
+    "name": "users_weak_UserTrash",
+    "module": "trash_multiple",
+    "config": "investigations/users_weak_UserTrash.cfg",
+    "expected": "temporal",
+    "group": "investigations"
+  },
+  {
+    "name": "users_strong_UserTrash",
+    "module": "investigations/trash_fair_cycle",
+    "config": "investigations/users_strong_UserTrash.cfg",
+    "expected": "temporal",
+    "group": "investigations",
+    "timeout": 300
+  },
+  {
+    "name": "declined_UserTrash",
+    "module": "investigations/trash_scenarios",
+    "config": "investigations/declined_UserTrash.cfg",
+    "expected": "temporal",
+    "group": "investigations"
+  },
+  {
+    "name": "users_weak_UserTrashDeposited",
+    "module": "trash_multiple",
+    "config": "investigations/users_weak_UserTrashDeposited.cfg",
+    "expected": "temporal",
+    "group": "investigations"
+  },
+  {
+    "name": "users_strong_UserTrashDeposited",
+    "module": "investigations/trash_fair_cycle",
+    "config": "investigations/users_strong_UserTrashDeposited.cfg",
+    "expected": "temporal",
+    "group": "investigations",
+    "timeout": 300
+  },
+  {
+    "name": "declined_UserTrashDeposited",
+    "module": "investigations/trash_scenarios",
+    "config": "investigations/declined_UserTrashDeposited.cfg",
+    "expected": "temporal",
+    "group": "investigations"
+  },
+  {
+    "name": "declined_other",
+    "module": "investigations/trash_scenarios",
+    "config": "investigations/declined_other.cfg",
+    "expected": "pass",
+    "group": "investigations"
+  },
+  {
+    "name": "invalid_card_safety",
+    "module": "investigations/trash_scenarios",
+    "config": "investigations/invalid_card_safety.cfg",
+    "expected": "pass",
+    "group": "investigations"
+  },
+  {
+    "name": "sensor_finished_only",
+    "module": "investigations/trash_no_sensor",
+    "config": "investigations/sensor_finished_only.cfg",
+    "expected": "assertion",
+    "group": "investigations"
+  },
+  {
+    "name": "compressed_reach_five",
+    "module": "investigations/trash_max_compressed",
+    "config": "investigations/compressed_reach_five.cfg",
+    "expected": "invariant:BelowFive",
+    "group": "investigations"
+  },
+  {
+    "name": "compressed_bound_five",
+    "module": "investigations/trash_max_compressed",
+    "config": "investigations/compressed_bound_five.cfg",
+    "expected": "pass",
+    "group": "investigations"
+  }
+]

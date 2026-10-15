@@ -2,7 +2,7 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "Assignment 2: translate and verify 4.4",
+      "label": "Assignment 2: translate and verify complete suite",
       "type": "process",
       "command": "powershell.exe",
       "args": ["-NoProfile", "-ExecutionPolicy", "Bypass", "-File", "${workspaceFolder}/scripts/verify.ps1", "-Mode", "suite"],

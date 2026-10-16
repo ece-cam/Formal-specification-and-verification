@@ -443,12 +443,12 @@ begin
 end process;
 
 end algorithm; *)
-\* BEGIN TRANSLATION (chksum(pcal) = "d73adf86" /\ chksum(tla) = "51ac11f5")
-VARIABLES outerDoorOpen, outerDoorLocked, trapDoorOpen, ramExtended, 
+\* BEGIN TRANSLATION (chksum(pcal) = "bf3650d0" /\ chksum(tla) = "4c2702b4")
+VARIABLES pc, outerDoorOpen, outerDoorLocked, trapDoorOpen, ramExtended, 
           trashInTop, trashCompressed, trashUncompressed, trashCapacity, 
           trapDestroyed, userTrash, grantedUser, doorUser, pendingBins, 
           admissionQueue, binCommand, binSensor, scans, permissions, 
-          serverRequests, serverResponses, truckCommand, pc
+          serverRequests, serverResponses, truckCommand
 
 (* define statement *)
 Trash(bin) == trashCompressed[bin] + trashUncompressed[bin]
@@ -579,12 +579,12 @@ AdmissionOK ==
 
 VARIABLES perm, selectedBin, req, currentScan, serverResponse
 
-vars == << outerDoorOpen, outerDoorLocked, trapDoorOpen, ramExtended, 
+vars == << pc, outerDoorOpen, outerDoorLocked, trapDoorOpen, ramExtended, 
            trashInTop, trashCompressed, trashUncompressed, trashCapacity, 
            trapDestroyed, userTrash, grantedUser, doorUser, pendingBins, 
            admissionQueue, binCommand, binSensor, scans, permissions, 
-           serverRequests, serverResponses, truckCommand, pc, perm, 
-           selectedBin, req, currentScan, serverResponse >>
+           serverRequests, serverResponses, truckCommand, perm, selectedBin, 
+           req, currentScan, serverResponse >>
 
 ProcSet == (Bins) \cup (Users) \cup {Server} \cup (Trucks) \cup {Control}
 

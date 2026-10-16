@@ -1,7 +1,7 @@
 TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)
 Warning: Please run the Java VM which executes TLC with a throughput optimized garbage collector by passing the "-XX:+UseParallelGC" property.
 (Use the -nowarning option to disable this warning.)
-Running breadth-first search Model-Checking with fp 0 and seed -5390553375823697677 with 1 worker on 32 cores with 742MB heap and 64MB offheap memory (Windows 11 10.0 x86, Oracle Corporation 1.8.0_503 x86, MSBDiskFPSet, DiskStateQueue).
+Running breadth-first search Model-Checking with fp 0 and seed -3696544910463876929 with 1 worker on 32 cores with 742MB heap and 64MB offheap memory (Windows 11 10.0 x86, Oracle Corporation 1.8.0_503 x86, MSBDiskFPSet, DiskStateQueue).
 Parsing file trash_max_compressed.tla
 Parsing file C:\Users\isikp\Desktop\Software Spec\Formal-specification-and-verification\trash_data.tla
 Parsing file C:\Users\isikp\AppData\Local\Temp\Integers.tla
@@ -16,9 +16,9 @@ Semantic processing of module FiniteSets
 Semantic processing of module TLC
 Semantic processing of module trash_data
 Semantic processing of module trash_max_compressed
-Starting... (2026-10-15 14:56:11)
+Starting... (2026-10-16 04:29:31)
 Computing initial states...
-Finished computing initial states: 1 distinct state generated at 2026-10-15 14:56:17.
+Finished computing initial states: 1 distinct state generated at 2026-10-16 04:29:36.
 Error: Invariant BelowFive is violated.
 Error: The behavior up to this point is:
 State 1: <Initial predicate>
@@ -52,10 +52,11 @@ State 1: <Initial predicate>
 /\ trashInTop = <<0>>
 /\ trashCompressed = <<0>>
 /\ trashUncompressed = <<0>>
+/\ admissionQueue = <<<<>>>>
 /\ pendingBins = <<>>
 /\ trashCapacity = <<7>>
 
-State 2: <ServerNextIteration line 832, col 24 to line 843, col 56 of module trash_max_compressed>
+State 2: <ServerNextIteration line 882, col 24 to line 893, col 56 of module trash_max_compressed>
 /\ trapDoorOpen = <<FALSE>>
 /\ binSensor = <<[sensor |-> "idle"]>>
 /\ serverRequests = <<>>
@@ -86,10 +87,11 @@ State 2: <ServerNextIteration line 832, col 24 to line 843, col 56 of module tra
 /\ trashInTop = <<0>>
 /\ trashCompressed = <<0>>
 /\ trashUncompressed = <<0>>
+/\ admissionQueue = <<<<>>>>
 /\ pendingBins = <<>>
 /\ trashCapacity = <<7>>
 
-State 3: <UserNextIteration line 684, col 28 to line 698, col 60 of module trash_max_compressed>
+State 3: <UserNextIteration line 731, col 28 to line 745, col 78 of module trash_max_compressed>
 /\ trapDoorOpen = <<FALSE>>
 /\ binSensor = <<[sensor |-> "idle"]>>
 /\ serverRequests = <<>>
@@ -120,10 +122,11 @@ State 3: <UserNextIteration line 684, col 28 to line 698, col 60 of module trash
 /\ trashInTop = <<0>>
 /\ trashCompressed = <<0>>
 /\ trashUncompressed = <<0>>
+/\ admissionQueue = <<<<>>>>
 /\ pendingBins = <<>>
 /\ trashCapacity = <<7>>
 
-State 4: <UserNewTrash line 812, col 23 to line 824, col 55 of module trash_max_compressed>
+State 4: <UserNewTrash line 862, col 23 to line 874, col 55 of module trash_max_compressed>
 /\ trapDoorOpen = <<FALSE>>
 /\ binSensor = <<[sensor |-> "idle"]>>
 /\ serverRequests = <<>>
@@ -154,10 +157,11 @@ State 4: <UserNewTrash line 812, col 23 to line 824, col 55 of module trash_max_
 /\ trashInTop = <<0>>
 /\ trashCompressed = <<0>>
 /\ trashUncompressed = <<0>>
+/\ admissionQueue = <<<<>>>>
 /\ pendingBins = <<>>
 /\ trashCapacity = <<7>>
 
-State 5: <UserNextIteration line 684, col 28 to line 698, col 60 of module trash_max_compressed>
+State 5: <UserNextIteration line 731, col 28 to line 745, col 78 of module trash_max_compressed>
 /\ trapDoorOpen = <<FALSE>>
 /\ binSensor = <<[sensor |-> "idle"]>>
 /\ serverRequests = <<>>
@@ -188,10 +192,11 @@ State 5: <UserNextIteration line 684, col 28 to line 698, col 60 of module trash
 /\ trashInTop = <<0>>
 /\ trashCompressed = <<0>>
 /\ trashUncompressed = <<0>>
+/\ admissionQueue = <<<<>>>>
 /\ pendingBins = <<>>
 /\ trashCapacity = <<7>>
 
-State 6: <UserNewTrash line 812, col 23 to line 824, col 55 of module trash_max_compressed>
+State 6: <UserNewTrash line 862, col 23 to line 874, col 55 of module trash_max_compressed>
 /\ trapDoorOpen = <<FALSE>>
 /\ binSensor = <<[sensor |-> "idle"]>>
 /\ serverRequests = <<>>
@@ -222,10 +227,11 @@ State 6: <UserNewTrash line 812, col 23 to line 824, col 55 of module trash_max_
 /\ trashInTop = <<0>>
 /\ trashCompressed = <<0>>
 /\ trashUncompressed = <<0>>
+/\ admissionQueue = <<<<>>>>
 /\ pendingBins = <<>>
 /\ trashCapacity = <<7>>
 
-State 7: <UserScanCard line 700, col 23 to line 713, col 55 of module trash_max_compressed>
+State 7: <UserScanCard line 747, col 23 to line 760, col 68 of module trash_max_compressed>
 /\ trapDoorOpen = <<FALSE>>
 /\ binSensor = <<[sensor |-> "idle"]>>
 /\ serverRequests = <<>>
@@ -256,10 +262,11 @@ State 7: <UserScanCard line 700, col 23 to line 713, col 55 of module trash_max_
 /\ trashInTop = <<0>>
 /\ trashCompressed = <<0>>
 /\ trashUncompressed = <<0>>
+/\ admissionQueue = <<<<>>>>
 /\ pendingBins = <<>>
 /\ trashCapacity = <<7>>
 
-State 8: <ControlNext line 930, col 16 to line 949, col 66 of module trash_max_compressed>
+State 8: <ControlNext line 983, col 16 to line 1006, col 66 of module trash_max_compressed>
 /\ trapDoorOpen = <<FALSE>>
 /\ binSensor = <<[sensor |-> "idle"]>>
 /\ serverRequests = <<[user |-> 3]>>
@@ -290,10 +297,11 @@ State 8: <ControlNext line 930, col 16 to line 949, col 66 of module trash_max_c
 /\ trashInTop = <<0>>
 /\ trashCompressed = <<0>>
 /\ trashUncompressed = <<0>>
+/\ admissionQueue = <<<<>>>>
 /\ pendingBins = <<>>
 /\ trashCapacity = <<7>>
 
-State 9: <ServerAwaitRequest line 845, col 23 to line 859, col 81 of module trash_max_compressed>
+State 9: <ServerAwaitRequest line 895, col 23 to line 909, col 81 of module trash_max_compressed>
 /\ trapDoorOpen = <<FALSE>>
 /\ binSensor = <<[sensor |-> "idle"]>>
 /\ serverRequests = <<>>
@@ -324,10 +332,11 @@ State 9: <ServerAwaitRequest line 845, col 23 to line 859, col 81 of module tras
 /\ trashInTop = <<0>>
 /\ trashCompressed = <<0>>
 /\ trashUncompressed = <<0>>
+/\ admissionQueue = <<<<>>>>
 /\ pendingBins = <<>>
 /\ trashCapacity = <<7>>
 
-State 10: <ServerNextIteration line 832, col 24 to line 843, col 56 of module trash_max_compressed>
+State 10: <ServerNextIteration line 882, col 24 to line 893, col 56 of module trash_max_compressed>
 /\ trapDoorOpen = <<FALSE>>
 /\ binSensor = <<[sensor |-> "idle"]>>
 /\ serverRequests = <<>>
@@ -358,10 +367,11 @@ State 10: <ServerNextIteration line 832, col 24 to line 843, col 56 of module tr
 /\ trashInTop = <<0>>
 /\ trashCompressed = <<0>>
 /\ trashUncompressed = <<0>>
+/\ admissionQueue = <<<<>>>>
 /\ pendingBins = <<>>
 /\ trashCapacity = <<7>>
 
-State 11: <ControlValidation line 951, col 22 to line 974, col 51 of module trash_max_compressed>
+State 11: <ControlValidation line 1008, col 22 to line 1043, col 51 of module trash_max_compressed>
 /\ trapDoorOpen = <<FALSE>>
 /\ binSensor = <<[sensor |-> "idle"]>>
 /\ serverRequests = <<>>
@@ -392,10 +402,11 @@ State 11: <ControlValidation line 951, col 22 to line 974, col 51 of module tras
 /\ trashInTop = <<0>>
 /\ trashCompressed = <<0>>
 /\ trashUncompressed = <<0>>
+/\ admissionQueue = <<<<>>>>
 /\ pendingBins = <<>>
 /\ trashCapacity = <<7>>
 
-State 12: <BinWaitForCommand line 581, col 28 to line 666, col 78 of module trash_max_compressed>
+State 12: <BinWaitForCommand line 626, col 28 to line 712, col 60 of module trash_max_compressed>
 /\ trapDoorOpen = <<FALSE>>
 /\ binSensor = <<[sensor |-> "idle"]>>
 /\ serverRequests = <<>>
@@ -426,10 +437,11 @@ State 12: <BinWaitForCommand line 581, col 28 to line 666, col 78 of module tras
 /\ trashInTop = <<0>>
 /\ trashCompressed = <<0>>
 /\ trashUncompressed = <<0>>
+/\ admissionQueue = <<<<>>>>
 /\ pendingBins = <<>>
 /\ trashCapacity = <<7>>
 
-State 13: <BinCommandFinished line 668, col 29 to line 680, col 79 of module trash_max_compressed>
+State 13: <BinCommandFinished line 714, col 29 to line 727, col 74 of module trash_max_compressed>
 /\ trapDoorOpen = <<FALSE>>
 /\ binSensor = <<[sensor |-> "idle"]>>
 /\ serverRequests = <<>>
@@ -460,10 +472,11 @@ State 13: <BinCommandFinished line 668, col 29 to line 680, col 79 of module tra
 /\ trashInTop = <<0>>
 /\ trashCompressed = <<0>>
 /\ trashUncompressed = <<0>>
+/\ admissionQueue = <<<<>>>>
 /\ pendingBins = <<>>
 /\ trashCapacity = <<7>>
 
-State 14: <ControlGrant line 976, col 17 to line 988, col 49 of module trash_max_compressed>
+State 14: <ControlGrant line 1045, col 17 to line 1057, col 80 of module trash_max_compressed>
 /\ trapDoorOpen = <<FALSE>>
 /\ binSensor = <<[sensor |-> "idle"]>>
 /\ serverRequests = <<>>
@@ -494,10 +507,11 @@ State 14: <ControlGrant line 976, col 17 to line 988, col 49 of module trash_max
 /\ trashInTop = <<0>>
 /\ trashCompressed = <<0>>
 /\ trashUncompressed = <<0>>
+/\ admissionQueue = <<<<>>>>
 /\ pendingBins = <<>>
 /\ trashCapacity = <<7>>
 
-State 15: <UserScanCard line 700, col 23 to line 713, col 55 of module trash_max_compressed>
+State 15: <UserScanCard line 747, col 23 to line 760, col 68 of module trash_max_compressed>
 /\ trapDoorOpen = <<FALSE>>
 /\ binSensor = <<[sensor |-> "idle"]>>
 /\ serverRequests = <<>>
@@ -528,10 +542,11 @@ State 15: <UserScanCard line 700, col 23 to line 713, col 55 of module trash_max
 /\ trashInTop = <<0>>
 /\ trashCompressed = <<0>>
 /\ trashUncompressed = <<0>>
+/\ admissionQueue = <<<<>>>>
 /\ pendingBins = <<>>
 /\ trashCapacity = <<7>>
 
-State 16: <UserAwaitScanResponse line 715, col 32 to line 736, col 77 of module trash_max_compressed>
+State 16: <UserAwaitScanResponse line 762, col 32 to line 784, col 77 of module trash_max_compressed>
 /\ trapDoorOpen = <<FALSE>>
 /\ binSensor = <<[sensor |-> "idle"]>>
 /\ serverRequests = <<>>
@@ -562,10 +577,11 @@ State 16: <UserAwaitScanResponse line 715, col 32 to line 736, col 77 of module 
 /\ trashInTop = <<0>>
 /\ trashCompressed = <<0>>
 /\ trashUncompressed = <<0>>
+/\ admissionQueue = <<<<>>>>
 /\ pendingBins = <<>>
 /\ trashCapacity = <<7>>
 
-State 17: <UserOpenDoor line 738, col 23 to line 750, col 55 of module trash_max_compressed>
+State 17: <UserOpenDoor line 786, col 23 to line 798, col 68 of module trash_max_compressed>
 /\ trapDoorOpen = <<FALSE>>
 /\ binSensor = <<[sensor |-> "idle"]>>
 /\ serverRequests = <<>>
@@ -596,10 +612,11 @@ State 17: <UserOpenDoor line 738, col 23 to line 750, col 55 of module trash_max
 /\ trashInTop = <<0>>
 /\ trashCompressed = <<0>>
 /\ trashUncompressed = <<0>>
+/\ admissionQueue = <<<<>>>>
 /\ pendingBins = <<>>
 /\ trashCapacity = <<7>>
 
-State 18: <BinWaitForCommand line 581, col 28 to line 666, col 78 of module trash_max_compressed>
+State 18: <BinWaitForCommand line 626, col 28 to line 712, col 60 of module trash_max_compressed>
 /\ trapDoorOpen = <<FALSE>>
 /\ binSensor = <<[sensor |-> "idle"]>>
 /\ serverRequests = <<>>
@@ -630,10 +647,11 @@ State 18: <BinWaitForCommand line 581, col 28 to line 666, col 78 of module tras
 /\ trashInTop = <<0>>
 /\ trashCompressed = <<0>>
 /\ trashUncompressed = <<0>>
+/\ admissionQueue = <<<<>>>>
 /\ pendingBins = <<>>
 /\ trashCapacity = <<7>>
 
-State 19: <BinCommandFinished line 668, col 29 to line 680, col 79 of module trash_max_compressed>
+State 19: <BinCommandFinished line 714, col 29 to line 727, col 74 of module trash_max_compressed>
 /\ trapDoorOpen = <<FALSE>>
 /\ binSensor = <<[sensor |-> "idle"]>>
 /\ serverRequests = <<>>
@@ -664,10 +682,11 @@ State 19: <BinCommandFinished line 668, col 29 to line 680, col 79 of module tra
 /\ trashInTop = <<0>>
 /\ trashCompressed = <<0>>
 /\ trashUncompressed = <<0>>
+/\ admissionQueue = <<<<>>>>
 /\ pendingBins = <<>>
 /\ trashCapacity = <<7>>
 
-State 20: <UserAwaitOpenDoor line 752, col 28 to line 765, col 60 of module trash_max_compressed>
+State 20: <UserAwaitOpenDoor line 800, col 28 to line 813, col 78 of module trash_max_compressed>
 /\ trapDoorOpen = <<FALSE>>
 /\ binSensor = <<[sensor |-> "idle"]>>
 /\ serverRequests = <<>>
@@ -698,10 +717,11 @@ State 20: <UserAwaitOpenDoor line 752, col 28 to line 765, col 60 of module tras
 /\ trashInTop = <<0>>
 /\ trashCompressed = <<0>>
 /\ trashUncompressed = <<0>>
+/\ admissionQueue = <<<<>>>>
 /\ pendingBins = <<>>
 /\ trashCapacity = <<7>>
 
-State 21: <UserDepositTrash line 767, col 27 to line 782, col 59 of module trash_max_compressed>
+State 21: <UserDepositTrash line 815, col 27 to line 830, col 72 of module trash_max_compressed>
 /\ trapDoorOpen = <<FALSE>>
 /\ binSensor = <<[sensor |-> "idle"]>>
 /\ serverRequests = <<>>
@@ -732,10 +752,11 @@ State 21: <UserDepositTrash line 767, col 27 to line 782, col 59 of module trash
 /\ trashInTop = <<6>>
 /\ trashCompressed = <<0>>
 /\ trashUncompressed = <<0>>
+/\ admissionQueue = <<<<>>>>
 /\ pendingBins = <<>>
 /\ trashCapacity = <<7>>
 
-State 22: <UserCloseDoor line 784, col 24 to line 795, col 69 of module trash_max_compressed>
+State 22: <UserCloseDoor line 832, col 24 to line 844, col 56 of module trash_max_compressed>
 /\ trapDoorOpen = <<FALSE>>
 /\ binSensor = <<[sensor |-> "idle"]>>
 /\ serverRequests = <<>>
@@ -766,10 +787,11 @@ State 22: <UserCloseDoor line 784, col 24 to line 795, col 69 of module trash_ma
 /\ trashInTop = <<6>>
 /\ trashCompressed = <<0>>
 /\ trashUncompressed = <<0>>
+/\ admissionQueue = <<<<>>>>
 /\ pendingBins = <<>>
 /\ trashCapacity = <<7>>
 
-State 23: <BinWaitForCommand line 581, col 28 to line 666, col 78 of module trash_max_compressed>
+State 23: <BinWaitForCommand line 626, col 28 to line 712, col 60 of module trash_max_compressed>
 /\ trapDoorOpen = <<FALSE>>
 /\ binSensor = <<[sensor |-> "outer_door_closed"]>>
 /\ serverRequests = <<>>
@@ -800,10 +822,11 @@ State 23: <BinWaitForCommand line 581, col 28 to line 666, col 78 of module tras
 /\ trashInTop = <<6>>
 /\ trashCompressed = <<0>>
 /\ trashUncompressed = <<0>>
+/\ admissionQueue = <<<<>>>>
 /\ pendingBins = <<>>
 /\ trashCapacity = <<7>>
 
-State 24: <BinCommandFinished line 668, col 29 to line 680, col 79 of module trash_max_compressed>
+State 24: <BinCommandFinished line 714, col 29 to line 727, col 74 of module trash_max_compressed>
 /\ trapDoorOpen = <<FALSE>>
 /\ binSensor = <<[sensor |-> "outer_door_closed"]>>
 /\ serverRequests = <<>>
@@ -834,10 +857,11 @@ State 24: <BinCommandFinished line 668, col 29 to line 680, col 79 of module tra
 /\ trashInTop = <<6>>
 /\ trashCompressed = <<0>>
 /\ trashUncompressed = <<0>>
+/\ admissionQueue = <<<<>>>>
 /\ pendingBins = <<>>
 /\ trashCapacity = <<7>>
 
-State 25: <ControlAwaitDoor line 990, col 21 to line 1003, col 66 of module trash_max_compressed>
+State 25: <ControlAwaitDoor line 1059, col 21 to line 1073, col 53 of module trash_max_compressed>
 /\ trapDoorOpen = <<FALSE>>
 /\ binSensor = <<[sensor |-> "outer_door_closed"]>>
 /\ serverRequests = <<>>
@@ -868,10 +892,11 @@ State 25: <ControlAwaitDoor line 990, col 21 to line 1003, col 66 of module tras
 /\ trashInTop = <<6>>
 /\ trashCompressed = <<0>>
 /\ trashUncompressed = <<0>>
+/\ admissionQueue = <<<<>>>>
 /\ pendingBins = <<>>
 /\ trashCapacity = <<7>>
 
-State 26: <BinWaitForCommand line 581, col 28 to line 666, col 78 of module trash_max_compressed>
+State 26: <BinWaitForCommand line 626, col 28 to line 712, col 60 of module trash_max_compressed>
 /\ trapDoorOpen = <<FALSE>>
 /\ binSensor = <<[sensor |-> "outer_door_closed"]>>
 /\ serverRequests = <<>>
@@ -902,10 +927,11 @@ State 26: <BinWaitForCommand line 581, col 28 to line 666, col 78 of module tras
 /\ trashInTop = <<6>>
 /\ trashCompressed = <<0>>
 /\ trashUncompressed = <<0>>
+/\ admissionQueue = <<<<>>>>
 /\ pendingBins = <<>>
 /\ trashCapacity = <<7>>
 
-State 27: <BinCommandFinished line 668, col 29 to line 680, col 79 of module trash_max_compressed>
+State 27: <BinCommandFinished line 714, col 29 to line 727, col 74 of module trash_max_compressed>
 /\ trapDoorOpen = <<FALSE>>
 /\ binSensor = <<[sensor |-> "outer_door_closed"]>>
 /\ serverRequests = <<>>
@@ -936,10 +962,11 @@ State 27: <BinCommandFinished line 668, col 29 to line 680, col 79 of module tra
 /\ trashInTop = <<6>>
 /\ trashCompressed = <<0>>
 /\ trashUncompressed = <<0>>
+/\ admissionQueue = <<<<>>>>
 /\ pendingBins = <<>>
 /\ trashCapacity = <<7>>
 
-State 28: <ControlAwaitLock line 1005, col 21 to line 1018, col 53 of module trash_max_compressed>
+State 28: <ControlAwaitLock line 1075, col 21 to line 1088, col 66 of module trash_max_compressed>
 /\ trapDoorOpen = <<FALSE>>
 /\ binSensor = <<[sensor |-> "outer_door_closed"]>>
 /\ serverRequests = <<>>
@@ -970,10 +997,11 @@ State 28: <ControlAwaitLock line 1005, col 21 to line 1018, col 53 of module tra
 /\ trashInTop = <<6>>
 /\ trashCompressed = <<0>>
 /\ trashUncompressed = <<0>>
+/\ admissionQueue = <<<<>>>>
 /\ pendingBins = <<>>
 /\ trashCapacity = <<7>>
 
-State 29: <BinWaitForCommand line 581, col 28 to line 666, col 78 of module trash_max_compressed>
+State 29: <BinWaitForCommand line 626, col 28 to line 712, col 60 of module trash_max_compressed>
 /\ trapDoorOpen = <<TRUE>>
 /\ binSensor = <<[sensor |-> "outer_door_closed"]>>
 /\ serverRequests = <<>>
@@ -1004,10 +1032,11 @@ State 29: <BinWaitForCommand line 581, col 28 to line 666, col 78 of module tras
 /\ trashInTop = <<0>>
 /\ trashCompressed = <<0>>
 /\ trashUncompressed = <<6>>
+/\ admissionQueue = <<<<>>>>
 /\ pendingBins = <<>>
 /\ trashCapacity = <<7>>
 
-State 30: <BinCommandFinished line 668, col 29 to line 680, col 79 of module trash_max_compressed>
+State 30: <BinCommandFinished line 714, col 29 to line 727, col 74 of module trash_max_compressed>
 /\ trapDoorOpen = <<TRUE>>
 /\ binSensor = <<[sensor |-> "outer_door_closed"]>>
 /\ serverRequests = <<>>
@@ -1038,10 +1067,11 @@ State 30: <BinCommandFinished line 668, col 29 to line 680, col 79 of module tra
 /\ trashInTop = <<0>>
 /\ trashCompressed = <<0>>
 /\ trashUncompressed = <<6>>
+/\ admissionQueue = <<<<>>>>
 /\ pendingBins = <<>>
 /\ trashCapacity = <<7>>
 
-State 31: <ControlAwaitTrapOpen line 1020, col 25 to line 1033, col 57 of module trash_max_compressed>
+State 31: <ControlAwaitTrapOpen line 1090, col 25 to line 1103, col 57 of module trash_max_compressed>
 /\ trapDoorOpen = <<TRUE>>
 /\ binSensor = <<[sensor |-> "outer_door_closed"]>>
 /\ serverRequests = <<>>
@@ -1072,10 +1102,11 @@ State 31: <ControlAwaitTrapOpen line 1020, col 25 to line 1033, col 57 of module
 /\ trashInTop = <<0>>
 /\ trashCompressed = <<0>>
 /\ trashUncompressed = <<6>>
+/\ admissionQueue = <<<<>>>>
 /\ pendingBins = <<>>
 /\ trashCapacity = <<7>>
 
-State 32: <BinWaitForCommand line 581, col 28 to line 666, col 78 of module trash_max_compressed>
+State 32: <BinWaitForCommand line 626, col 28 to line 712, col 60 of module trash_max_compressed>
 /\ trapDoorOpen = <<TRUE>>
 /\ binSensor = <<[sensor |-> "outer_door_closed"]>>
 /\ serverRequests = <<>>
@@ -1106,10 +1137,11 @@ State 32: <BinWaitForCommand line 581, col 28 to line 666, col 78 of module tras
 /\ trashInTop = <<0>>
 /\ trashCompressed = <<3>>
 /\ trashUncompressed = <<0>>
+/\ admissionQueue = <<<<>>>>
 /\ pendingBins = <<>>
 /\ trashCapacity = <<7>>
 
-State 33: <BinCommandFinished line 668, col 29 to line 680, col 79 of module trash_max_compressed>
+State 33: <BinCommandFinished line 714, col 29 to line 727, col 74 of module trash_max_compressed>
 /\ trapDoorOpen = <<TRUE>>
 /\ binSensor = <<[sensor |-> "outer_door_closed"]>>
 /\ serverRequests = <<>>
@@ -1140,10 +1172,11 @@ State 33: <BinCommandFinished line 668, col 29 to line 680, col 79 of module tra
 /\ trashInTop = <<0>>
 /\ trashCompressed = <<3>>
 /\ trashUncompressed = <<0>>
+/\ admissionQueue = <<<<>>>>
 /\ pendingBins = <<>>
 /\ trashCapacity = <<7>>
 
-State 34: <ControlAwaitRamExtend line 1035, col 26 to line 1048, col 58 of module trash_max_compressed>
+State 34: <ControlAwaitRamExtend line 1105, col 26 to line 1118, col 71 of module trash_max_compressed>
 /\ trapDoorOpen = <<TRUE>>
 /\ binSensor = <<[sensor |-> "outer_door_closed"]>>
 /\ serverRequests = <<>>
@@ -1174,10 +1207,11 @@ State 34: <ControlAwaitRamExtend line 1035, col 26 to line 1048, col 58 of modul
 /\ trashInTop = <<0>>
 /\ trashCompressed = <<3>>
 /\ trashUncompressed = <<0>>
+/\ admissionQueue = <<<<>>>>
 /\ pendingBins = <<>>
 /\ trashCapacity = <<7>>
 
-State 35: <BinWaitForCommand line 581, col 28 to line 666, col 78 of module trash_max_compressed>
+State 35: <BinWaitForCommand line 626, col 28 to line 712, col 60 of module trash_max_compressed>
 /\ trapDoorOpen = <<TRUE>>
 /\ binSensor = <<[sensor |-> "outer_door_closed"]>>
 /\ serverRequests = <<>>
@@ -1208,10 +1242,11 @@ State 35: <BinWaitForCommand line 581, col 28 to line 666, col 78 of module tras
 /\ trashInTop = <<0>>
 /\ trashCompressed = <<3>>
 /\ trashUncompressed = <<0>>
+/\ admissionQueue = <<<<>>>>
 /\ pendingBins = <<>>
 /\ trashCapacity = <<7>>
 
-State 36: <BinCommandFinished line 668, col 29 to line 680, col 79 of module trash_max_compressed>
+State 36: <BinCommandFinished line 714, col 29 to line 727, col 74 of module trash_max_compressed>
 /\ trapDoorOpen = <<TRUE>>
 /\ binSensor = <<[sensor |-> "outer_door_closed"]>>
 /\ serverRequests = <<>>
@@ -1242,10 +1277,11 @@ State 36: <BinCommandFinished line 668, col 29 to line 680, col 79 of module tra
 /\ trashInTop = <<0>>
 /\ trashCompressed = <<3>>
 /\ trashUncompressed = <<0>>
+/\ admissionQueue = <<<<>>>>
 /\ pendingBins = <<>>
 /\ trashCapacity = <<7>>
 
-State 37: <ControlAwaitRamRetract line 1050, col 27 to line 1063, col 72 of module trash_max_compressed>
+State 37: <ControlAwaitRamRetract line 1120, col 27 to line 1134, col 59 of module trash_max_compressed>
 /\ trapDoorOpen = <<TRUE>>
 /\ binSensor = <<[sensor |-> "outer_door_closed"]>>
 /\ serverRequests = <<>>
@@ -1276,10 +1312,11 @@ State 37: <ControlAwaitRamRetract line 1050, col 27 to line 1063, col 72 of modu
 /\ trashInTop = <<0>>
 /\ trashCompressed = <<3>>
 /\ trashUncompressed = <<0>>
+/\ admissionQueue = <<<<>>>>
 /\ pendingBins = <<>>
 /\ trashCapacity = <<7>>
 
-State 38: <BinWaitForCommand line 581, col 28 to line 666, col 78 of module trash_max_compressed>
+State 38: <BinWaitForCommand line 626, col 28 to line 712, col 60 of module trash_max_compressed>
 /\ trapDoorOpen = <<FALSE>>
 /\ binSensor = <<[sensor |-> "outer_door_closed"]>>
 /\ serverRequests = <<>>
@@ -1310,10 +1347,11 @@ State 38: <BinWaitForCommand line 581, col 28 to line 666, col 78 of module tras
 /\ trashInTop = <<0>>
 /\ trashCompressed = <<3>>
 /\ trashUncompressed = <<0>>
+/\ admissionQueue = <<<<>>>>
 /\ pendingBins = <<>>
 /\ trashCapacity = <<7>>
 
-State 39: <BinCommandFinished line 668, col 29 to line 680, col 79 of module trash_max_compressed>
+State 39: <BinCommandFinished line 714, col 29 to line 727, col 74 of module trash_max_compressed>
 /\ trapDoorOpen = <<FALSE>>
 /\ binSensor = <<[sensor |-> "outer_door_closed"]>>
 /\ serverRequests = <<>>
@@ -1344,10 +1382,11 @@ State 39: <BinCommandFinished line 668, col 29 to line 680, col 79 of module tra
 /\ trashInTop = <<0>>
 /\ trashCompressed = <<3>>
 /\ trashUncompressed = <<0>>
+/\ admissionQueue = <<<<>>>>
 /\ pendingBins = <<>>
 /\ trashCapacity = <<7>>
 
-State 40: <ControlAwaitTrapClose line 1065, col 26 to line 1083, col 58 of module trash_max_compressed>
+State 40: <ControlAwaitTrapClose line 1136, col 26 to line 1154, col 71 of module trash_max_compressed>
 /\ trapDoorOpen = <<FALSE>>
 /\ binSensor = <<[sensor |-> "idle"]>>
 /\ serverRequests = <<>>
@@ -1378,10 +1417,11 @@ State 40: <ControlAwaitTrapClose line 1065, col 26 to line 1083, col 58 of modul
 /\ trashInTop = <<0>>
 /\ trashCompressed = <<3>>
 /\ trashUncompressed = <<0>>
+/\ admissionQueue = <<<<>>>>
 /\ pendingBins = <<>>
 /\ trashCapacity = <<7>>
 
-State 41: <ControlNext line 930, col 16 to line 949, col 66 of module trash_max_compressed>
+State 41: <ControlNext line 983, col 16 to line 1006, col 66 of module trash_max_compressed>
 /\ trapDoorOpen = <<FALSE>>
 /\ binSensor = <<[sensor |-> "idle"]>>
 /\ serverRequests = <<[user |-> 2]>>
@@ -1412,10 +1452,11 @@ State 41: <ControlNext line 930, col 16 to line 949, col 66 of module trash_max_
 /\ trashInTop = <<0>>
 /\ trashCompressed = <<3>>
 /\ trashUncompressed = <<0>>
+/\ admissionQueue = <<<<>>>>
 /\ pendingBins = <<>>
 /\ trashCapacity = <<7>>
 
-State 42: <ServerAwaitRequest line 845, col 23 to line 859, col 81 of module trash_max_compressed>
+State 42: <ServerAwaitRequest line 895, col 23 to line 909, col 81 of module trash_max_compressed>
 /\ trapDoorOpen = <<FALSE>>
 /\ binSensor = <<[sensor |-> "idle"]>>
 /\ serverRequests = <<>>
@@ -1446,10 +1487,11 @@ State 42: <ServerAwaitRequest line 845, col 23 to line 859, col 81 of module tra
 /\ trashInTop = <<0>>
 /\ trashCompressed = <<3>>
 /\ trashUncompressed = <<0>>
+/\ admissionQueue = <<<<>>>>
 /\ pendingBins = <<>>
 /\ trashCapacity = <<7>>
 
-State 43: <ControlValidation line 951, col 22 to line 974, col 51 of module trash_max_compressed>
+State 43: <ControlValidation line 1008, col 22 to line 1043, col 51 of module trash_max_compressed>
 /\ trapDoorOpen = <<FALSE>>
 /\ binSensor = <<[sensor |-> "idle"]>>
 /\ serverRequests = <<>>
@@ -1480,10 +1522,11 @@ State 43: <ControlValidation line 951, col 22 to line 974, col 51 of module tras
 /\ trashInTop = <<0>>
 /\ trashCompressed = <<3>>
 /\ trashUncompressed = <<0>>
+/\ admissionQueue = <<<<>>>>
 /\ pendingBins = <<>>
 /\ trashCapacity = <<7>>
 
-State 44: <BinWaitForCommand line 581, col 28 to line 666, col 78 of module trash_max_compressed>
+State 44: <BinWaitForCommand line 626, col 28 to line 712, col 60 of module trash_max_compressed>
 /\ trapDoorOpen = <<FALSE>>
 /\ binSensor = <<[sensor |-> "idle"]>>
 /\ serverRequests = <<>>
@@ -1514,10 +1557,11 @@ State 44: <BinWaitForCommand line 581, col 28 to line 666, col 78 of module tras
 /\ trashInTop = <<0>>
 /\ trashCompressed = <<3>>
 /\ trashUncompressed = <<0>>
+/\ admissionQueue = <<<<>>>>
 /\ pendingBins = <<>>
 /\ trashCapacity = <<7>>
 
-State 45: <BinCommandFinished line 668, col 29 to line 680, col 79 of module trash_max_compressed>
+State 45: <BinCommandFinished line 714, col 29 to line 727, col 74 of module trash_max_compressed>
 /\ trapDoorOpen = <<FALSE>>
 /\ binSensor = <<[sensor |-> "idle"]>>
 /\ serverRequests = <<>>
@@ -1548,10 +1592,11 @@ State 45: <BinCommandFinished line 668, col 29 to line 680, col 79 of module tra
 /\ trashInTop = <<0>>
 /\ trashCompressed = <<3>>
 /\ trashUncompressed = <<0>>
+/\ admissionQueue = <<<<>>>>
 /\ pendingBins = <<>>
 /\ trashCapacity = <<7>>
 
-State 46: <ControlGrant line 976, col 17 to line 988, col 49 of module trash_max_compressed>
+State 46: <ControlGrant line 1045, col 17 to line 1057, col 80 of module trash_max_compressed>
 /\ trapDoorOpen = <<FALSE>>
 /\ binSensor = <<[sensor |-> "idle"]>>
 /\ serverRequests = <<>>
@@ -1582,10 +1627,11 @@ State 46: <ControlGrant line 976, col 17 to line 988, col 49 of module trash_max
 /\ trashInTop = <<0>>
 /\ trashCompressed = <<3>>
 /\ trashUncompressed = <<0>>
+/\ admissionQueue = <<<<>>>>
 /\ pendingBins = <<>>
 /\ trashCapacity = <<7>>
 
-State 47: <UserAwaitScanResponse line 715, col 32 to line 736, col 77 of module trash_max_compressed>
+State 47: <UserAwaitScanResponse line 762, col 32 to line 784, col 77 of module trash_max_compressed>
 /\ trapDoorOpen = <<FALSE>>
 /\ binSensor = <<[sensor |-> "idle"]>>
 /\ serverRequests = <<>>
@@ -1616,10 +1662,11 @@ State 47: <UserAwaitScanResponse line 715, col 32 to line 736, col 77 of module 
 /\ trashInTop = <<0>>
 /\ trashCompressed = <<3>>
 /\ trashUncompressed = <<0>>
+/\ admissionQueue = <<<<>>>>
 /\ pendingBins = <<>>
 /\ trashCapacity = <<7>>
 
-State 48: <UserOpenDoor line 738, col 23 to line 750, col 55 of module trash_max_compressed>
+State 48: <UserOpenDoor line 786, col 23 to line 798, col 68 of module trash_max_compressed>
 /\ trapDoorOpen = <<FALSE>>
 /\ binSensor = <<[sensor |-> "idle"]>>
 /\ serverRequests = <<>>
@@ -1650,10 +1697,11 @@ State 48: <UserOpenDoor line 738, col 23 to line 750, col 55 of module trash_max
 /\ trashInTop = <<0>>
 /\ trashCompressed = <<3>>
 /\ trashUncompressed = <<0>>
+/\ admissionQueue = <<<<>>>>
 /\ pendingBins = <<>>
 /\ trashCapacity = <<7>>
 
-State 49: <BinWaitForCommand line 581, col 28 to line 666, col 78 of module trash_max_compressed>
+State 49: <BinWaitForCommand line 626, col 28 to line 712, col 60 of module trash_max_compressed>
 /\ trapDoorOpen = <<FALSE>>
 /\ binSensor = <<[sensor |-> "idle"]>>
 /\ serverRequests = <<>>
@@ -1684,10 +1732,11 @@ State 49: <BinWaitForCommand line 581, col 28 to line 666, col 78 of module tras
 /\ trashInTop = <<0>>
 /\ trashCompressed = <<3>>
 /\ trashUncompressed = <<0>>
+/\ admissionQueue = <<<<>>>>
 /\ pendingBins = <<>>
 /\ trashCapacity = <<7>>
 
-State 50: <BinCommandFinished line 668, col 29 to line 680, col 79 of module trash_max_compressed>
+State 50: <BinCommandFinished line 714, col 29 to line 727, col 74 of module trash_max_compressed>
 /\ trapDoorOpen = <<FALSE>>
 /\ binSensor = <<[sensor |-> "idle"]>>
 /\ serverRequests = <<>>
@@ -1718,10 +1767,11 @@ State 50: <BinCommandFinished line 668, col 29 to line 680, col 79 of module tra
 /\ trashInTop = <<0>>
 /\ trashCompressed = <<3>>
 /\ trashUncompressed = <<0>>
+/\ admissionQueue = <<<<>>>>
 /\ pendingBins = <<>>
 /\ trashCapacity = <<7>>
 
-State 51: <UserAwaitOpenDoor line 752, col 28 to line 765, col 60 of module trash_max_compressed>
+State 51: <UserAwaitOpenDoor line 800, col 28 to line 813, col 78 of module trash_max_compressed>
 /\ trapDoorOpen = <<FALSE>>
 /\ binSensor = <<[sensor |-> "idle"]>>
 /\ serverRequests = <<>>
@@ -1752,10 +1802,11 @@ State 51: <UserAwaitOpenDoor line 752, col 28 to line 765, col 60 of module tras
 /\ trashInTop = <<0>>
 /\ trashCompressed = <<3>>
 /\ trashUncompressed = <<0>>
+/\ admissionQueue = <<<<>>>>
 /\ pendingBins = <<>>
 /\ trashCapacity = <<7>>
 
-State 52: <UserDepositTrash line 767, col 27 to line 782, col 59 of module trash_max_compressed>
+State 52: <UserDepositTrash line 815, col 27 to line 830, col 72 of module trash_max_compressed>
 /\ trapDoorOpen = <<FALSE>>
 /\ binSensor = <<[sensor |-> "idle"]>>
 /\ serverRequests = <<>>
@@ -1786,10 +1837,11 @@ State 52: <UserDepositTrash line 767, col 27 to line 782, col 59 of module trash
 /\ trashInTop = <<4>>
 /\ trashCompressed = <<3>>
 /\ trashUncompressed = <<0>>
+/\ admissionQueue = <<<<>>>>
 /\ pendingBins = <<>>
 /\ trashCapacity = <<7>>
 
-State 53: <UserCloseDoor line 784, col 24 to line 795, col 69 of module trash_max_compressed>
+State 53: <UserCloseDoor line 832, col 24 to line 844, col 56 of module trash_max_compressed>
 /\ trapDoorOpen = <<FALSE>>
 /\ binSensor = <<[sensor |-> "idle"]>>
 /\ serverRequests = <<>>
@@ -1820,10 +1872,11 @@ State 53: <UserCloseDoor line 784, col 24 to line 795, col 69 of module trash_ma
 /\ trashInTop = <<4>>
 /\ trashCompressed = <<3>>
 /\ trashUncompressed = <<0>>
+/\ admissionQueue = <<<<>>>>
 /\ pendingBins = <<>>
 /\ trashCapacity = <<7>>
 
-State 54: <BinWaitForCommand line 581, col 28 to line 666, col 78 of module trash_max_compressed>
+State 54: <BinWaitForCommand line 626, col 28 to line 712, col 60 of module trash_max_compressed>
 /\ trapDoorOpen = <<FALSE>>
 /\ binSensor = <<[sensor |-> "outer_door_closed"]>>
 /\ serverRequests = <<>>
@@ -1854,10 +1907,11 @@ State 54: <BinWaitForCommand line 581, col 28 to line 666, col 78 of module tras
 /\ trashInTop = <<4>>
 /\ trashCompressed = <<3>>
 /\ trashUncompressed = <<0>>
+/\ admissionQueue = <<<<>>>>
 /\ pendingBins = <<>>
 /\ trashCapacity = <<7>>
 
-State 55: <BinCommandFinished line 668, col 29 to line 680, col 79 of module trash_max_compressed>
+State 55: <BinCommandFinished line 714, col 29 to line 727, col 74 of module trash_max_compressed>
 /\ trapDoorOpen = <<FALSE>>
 /\ binSensor = <<[sensor |-> "outer_door_closed"]>>
 /\ serverRequests = <<>>
@@ -1888,10 +1942,11 @@ State 55: <BinCommandFinished line 668, col 29 to line 680, col 79 of module tra
 /\ trashInTop = <<4>>
 /\ trashCompressed = <<3>>
 /\ trashUncompressed = <<0>>
+/\ admissionQueue = <<<<>>>>
 /\ pendingBins = <<>>
 /\ trashCapacity = <<7>>
 
-State 56: <ControlAwaitDoor line 990, col 21 to line 1003, col 66 of module trash_max_compressed>
+State 56: <ControlAwaitDoor line 1059, col 21 to line 1073, col 53 of module trash_max_compressed>
 /\ trapDoorOpen = <<FALSE>>
 /\ binSensor = <<[sensor |-> "outer_door_closed"]>>
 /\ serverRequests = <<>>
@@ -1922,10 +1977,11 @@ State 56: <ControlAwaitDoor line 990, col 21 to line 1003, col 66 of module tras
 /\ trashInTop = <<4>>
 /\ trashCompressed = <<3>>
 /\ trashUncompressed = <<0>>
+/\ admissionQueue = <<<<>>>>
 /\ pendingBins = <<>>
 /\ trashCapacity = <<7>>
 
-State 57: <BinWaitForCommand line 581, col 28 to line 666, col 78 of module trash_max_compressed>
+State 57: <BinWaitForCommand line 626, col 28 to line 712, col 60 of module trash_max_compressed>
 /\ trapDoorOpen = <<FALSE>>
 /\ binSensor = <<[sensor |-> "outer_door_closed"]>>
 /\ serverRequests = <<>>
@@ -1956,10 +2012,11 @@ State 57: <BinWaitForCommand line 581, col 28 to line 666, col 78 of module tras
 /\ trashInTop = <<4>>
 /\ trashCompressed = <<3>>
 /\ trashUncompressed = <<0>>
+/\ admissionQueue = <<<<>>>>
 /\ pendingBins = <<>>
 /\ trashCapacity = <<7>>
 
-State 58: <BinCommandFinished line 668, col 29 to line 680, col 79 of module trash_max_compressed>
+State 58: <BinCommandFinished line 714, col 29 to line 727, col 74 of module trash_max_compressed>
 /\ trapDoorOpen = <<FALSE>>
 /\ binSensor = <<[sensor |-> "outer_door_closed"]>>
 /\ serverRequests = <<>>
@@ -1990,10 +2047,11 @@ State 58: <BinCommandFinished line 668, col 29 to line 680, col 79 of module tra
 /\ trashInTop = <<4>>
 /\ trashCompressed = <<3>>
 /\ trashUncompressed = <<0>>
+/\ admissionQueue = <<<<>>>>
 /\ pendingBins = <<>>
 /\ trashCapacity = <<7>>
 
-State 59: <ControlAwaitLock line 1005, col 21 to line 1018, col 53 of module trash_max_compressed>
+State 59: <ControlAwaitLock line 1075, col 21 to line 1088, col 66 of module trash_max_compressed>
 /\ trapDoorOpen = <<FALSE>>
 /\ binSensor = <<[sensor |-> "outer_door_closed"]>>
 /\ serverRequests = <<>>
@@ -2024,10 +2082,11 @@ State 59: <ControlAwaitLock line 1005, col 21 to line 1018, col 53 of module tra
 /\ trashInTop = <<4>>
 /\ trashCompressed = <<3>>
 /\ trashUncompressed = <<0>>
+/\ admissionQueue = <<<<>>>>
 /\ pendingBins = <<>>
 /\ trashCapacity = <<7>>
 
-State 60: <BinWaitForCommand line 581, col 28 to line 666, col 78 of module trash_max_compressed>
+State 60: <BinWaitForCommand line 626, col 28 to line 712, col 60 of module trash_max_compressed>
 /\ trapDoorOpen = <<TRUE>>
 /\ binSensor = <<[sensor |-> "outer_door_closed"]>>
 /\ serverRequests = <<>>
@@ -2058,10 +2117,11 @@ State 60: <BinWaitForCommand line 581, col 28 to line 666, col 78 of module tras
 /\ trashInTop = <<0>>
 /\ trashCompressed = <<3>>
 /\ trashUncompressed = <<4>>
+/\ admissionQueue = <<<<>>>>
 /\ pendingBins = <<>>
 /\ trashCapacity = <<7>>
 
-State 61: <BinCommandFinished line 668, col 29 to line 680, col 79 of module trash_max_compressed>
+State 61: <BinCommandFinished line 714, col 29 to line 727, col 74 of module trash_max_compressed>
 /\ trapDoorOpen = <<TRUE>>
 /\ binSensor = <<[sensor |-> "outer_door_closed"]>>
 /\ serverRequests = <<>>
@@ -2092,10 +2152,11 @@ State 61: <BinCommandFinished line 668, col 29 to line 680, col 79 of module tra
 /\ trashInTop = <<0>>
 /\ trashCompressed = <<3>>
 /\ trashUncompressed = <<4>>
+/\ admissionQueue = <<<<>>>>
 /\ pendingBins = <<>>
 /\ trashCapacity = <<7>>
 
-State 62: <ControlAwaitTrapOpen line 1020, col 25 to line 1033, col 57 of module trash_max_compressed>
+State 62: <ControlAwaitTrapOpen line 1090, col 25 to line 1103, col 57 of module trash_max_compressed>
 /\ trapDoorOpen = <<TRUE>>
 /\ binSensor = <<[sensor |-> "outer_door_closed"]>>
 /\ serverRequests = <<>>
@@ -2126,10 +2187,11 @@ State 62: <ControlAwaitTrapOpen line 1020, col 25 to line 1033, col 57 of module
 /\ trashInTop = <<0>>
 /\ trashCompressed = <<3>>
 /\ trashUncompressed = <<4>>
+/\ admissionQueue = <<<<>>>>
 /\ pendingBins = <<>>
 /\ trashCapacity = <<7>>
 
-State 63: <BinWaitForCommand line 581, col 28 to line 666, col 78 of module trash_max_compressed>
+State 63: <BinWaitForCommand line 626, col 28 to line 712, col 60 of module trash_max_compressed>
 /\ trapDoorOpen = <<TRUE>>
 /\ binSensor = <<[sensor |-> "outer_door_closed"]>>
 /\ serverRequests = <<>>
@@ -2160,10 +2222,11 @@ State 63: <BinWaitForCommand line 581, col 28 to line 666, col 78 of module tras
 /\ trashInTop = <<0>>
 /\ trashCompressed = <<5>>
 /\ trashUncompressed = <<0>>
+/\ admissionQueue = <<<<>>>>
 /\ pendingBins = <<>>
 /\ trashCapacity = <<7>>
 
-6855 states generated, 2694 distinct states found, 107 states left on queue.
+6937 states generated, 2735 distinct states found, 111 states left on queue.
 The depth of the complete state graph search is 63.
 The average outdegree of the complete state graph is 1 (minimum is 0, the maximum 3 and the 95th percentile is 2).
-Finished in 05s at (2026-10-15 14:56:17)
+Finished in 05s at (2026-10-16 04:29:37)

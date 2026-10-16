@@ -19,6 +19,40 @@ def digest(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def dependencies(module):
+    """Record local EXTENDS dependencies, including wrappers' production model."""
+    found = {}
+    def visit(path):
+        for line in path.read_text(encoding='utf-8').splitlines():
+            if not line.startswith('EXTENDS '):
+                continue
+            for name in line[8:].split(','):
+                name = name.strip().split()[0]
+                target = path.parent / (name + '.tla')
+                if not target.exists():
+                    target = ROOT / (name + '.tla')
+                if target.exists():
+                    key = target.relative_to(ROOT).as_posix()
+                    if key not in found:
+                        found[key] = digest(target)
+                        visit(target)
+    visit(ROOT / (module + '.tla'))
+    return found
+
+
+def current_result(check):
+    path = ROOT / 'verification' / (check['name'] + '.run.json')
+    if not path.exists():
+        return False
+    result = json.loads(path.read_text())
+    return (result.get('expectedResultObserved') and result.get('expected') == check['expected']
+            and result.get('modelSha256') == digest(ROOT / (check['module'] + '.tla'))
+            and result.get('configSha256') == digest(ROOT / check['config'])
+            and result.get('dataSha256') == digest(ROOT / 'trash_data.tla')
+            and all(result.get('dependencies', {}).get(k, result.get('dataSha256') if k == 'trash_data.tla' else None) == v
+                    for k, v in dependencies(check['module']).items()))
+
+
 def translate(module):
     path = ROOT / (module + '.tla')
     source = path.read_text(encoding='utf-8')
@@ -74,6 +108,7 @@ def run(check):
                    expectedResultObserved=matched and not timed_out,
                    modelSha256=digest(ROOT / (module + '.tla')),
                    configSha256=digest(ROOT / config), dataSha256=digest(ROOT / 'trash_data.tla'),
+                   dependencies=dependencies(module),
                    toolsSha256=digest(JAR), command=command)
     if counts:
         summary.update(zip(('generatedStates', 'distinctStates', 'queuedStates'),
@@ -96,15 +131,14 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--mode', default='suite', choices=['suite', 'all', 'single', 'multiple', 'unfair', 'investigations'])
     parser.add_argument('--check', help='Run one check by its manifest name')
-    parser.add_argument('--failed', action='store_true', help='Only rerun checks without a successful recorded result')
+    parser.add_argument('--failed', action='store_true', help='Rerun missing, failed, or stale results')
     args = parser.parse_args()
     checks = json.loads((ROOT / 'checks.json').read_text())
     selected = [c for c in checks if c['name'] == args.check] if args.check else [
         c for c in checks if args.mode == 'suite' or c['group'] == args.mode
         or (args.mode == 'all' and c['group'] in ('single', 'multiple'))]
     if args.failed:
-        selected = [c for c in selected if not (ROOT / 'verification' / (c['name'] + '.run.json')).exists()
-                    or not json.loads((ROOT / 'verification' / (c['name'] + '.run.json')).read_text()).get('expectedResultObserved')]
+        selected = [c for c in selected if not current_result(c)]
     if not selected:
         raise SystemExit('No checks selected')
     for module in dict.fromkeys(c['module'] for c in selected):

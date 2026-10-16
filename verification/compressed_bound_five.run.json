@@ -5,12 +5,15 @@
   "expected": "pass",
   "group": "investigations",
   "exitCode": 0,
-  "wallSeconds": 6.319,
+  "wallSeconds": 6.173,
   "timedOut": false,
   "expectedResultObserved": true,
-  "modelSha256": "31507a1c38d80c0d5e79a11fb9cbf2fbdcdff564c83c892a79bed3f89816f944",
+  "modelSha256": "0cb0d43c923b6dede759545f23279c048e6c89c3786e567ab5d82491bf44c6b0",
   "configSha256": "f2a3e2cc37fa385a6c295f1a96273deb1ff438f6b733b422d66543c0e87da002",
   "dataSha256": "24f34044deadc6246204b892991a84e5a56c675ad05a78e3f091f524218c90a8",
+  "dependencies": {
+    "trash_data.tla": "24f34044deadc6246204b892991a84e5a56c675ad05a78e3f091f524218c90a8"
+  },
   "toolsSha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
   "command": [
     "C:\\Program Files (x86)\\Java\\jre1.8.0_503\\bin\\java.exe",
@@ -29,7 +32,7 @@
     "C:\\Users\\isikp\\Desktop\\Software Spec\\Formal-specification-and-verification\\investigations\\compressed_bound_five.cfg",
     "trash_max_compressed"
   ],
-  "generatedStates": 17712,
-  "distinctStates": 6628,
+  "generatedStates": 13348,
+  "distinctStates": 5192,
   "queuedStates": 0
 }

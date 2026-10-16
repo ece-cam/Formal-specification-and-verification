@@ -5,3 +5,5 @@ states/
 *_TTrace_*.tla
 *_TTrace_*.cfg
 .vscode/tlc/
+__pycache__/
+*.pyc

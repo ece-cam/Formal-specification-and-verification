@@ -1,19 +1,23 @@
 {
   "name": "users_weak_UserTrash",
-  "module": "trash_multiple",
+  "module": "investigations/trash_scenarios",
   "config": "investigations/users_weak_UserTrash.cfg",
   "expected": "temporal",
   "group": "investigations",
   "exitCode": 13,
-  "wallSeconds": 32.801,
+  "wallSeconds": 24.032,
   "timedOut": false,
   "expectedResultObserved": true,
-  "modelSha256": "5f79873bebd93a210e4932d3e53ea2640a19a8692e7dd6603ba6fadc9faa1ff1",
-  "configSha256": "6e06e8ede341ac41b5790847448f77d099323c1113b720be7a5bffb707c0f732",
+  "modelSha256": "676dee29ba49543fb163ee76b990b5e351696c9302054a688c5c07051c439fec",
+  "configSha256": "fd0bfd2287b30cc45f78b3dd080dc80cfc89e0bb8282df03ad3babcd5533fd8a",
   "dataSha256": "24f34044deadc6246204b892991a84e5a56c675ad05a78e3f091f524218c90a8",
+  "dependencies": {
+    "trash_multiple.tla": "a4ea0cb3c178118bef054044d8feb5fce3948aceca675abd9e4f227ffacde94d",
+    "trash_data.tla": "24f34044deadc6246204b892991a84e5a56c675ad05a78e3f091f524218c90a8"
+  },
   "toolsSha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
   "command": [
-    "java",
+    "C:\\Program Files (x86)\\Java\\jre1.8.0_503\\bin\\java.exe",
     "-Xmx768m",
     "-DTLA-Library=C:\\Users\\isikp\\Desktop\\Software Spec\\Formal-specification-and-verification",
     "-cp",
@@ -27,9 +31,9 @@
     "C:\\Users\\isikp\\Desktop\\Software Spec\\Formal-specification-and-verification\\states\\users_weak_UserTrash",
     "-config",
     "C:\\Users\\isikp\\Desktop\\Software Spec\\Formal-specification-and-verification\\investigations\\users_weak_UserTrash.cfg",
-    "trash_multiple"
+    "trash_scenarios"
   ],
-  "generatedStates": 241315,
-  "distinctStates": 81060,
+  "generatedStates": 262931,
+  "distinctStates": 88084,
   "queuedStates": 0
 }

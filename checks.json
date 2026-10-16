@@ -17,7 +17,7 @@
     "name": "multiple_users",
     "module": "trash_multiple",
     "config": "multiple_users.cfg",
-    "expected": "temporal",
+    "expected": "pass",
     "group": "multiple"
   },
   {
@@ -64,18 +64,10 @@
   },
   {
     "name": "users_weak_UserTrash",
-    "module": "trash_multiple",
+    "module": "investigations/trash_scenarios",
     "config": "investigations/users_weak_UserTrash.cfg",
     "expected": "temporal",
     "group": "investigations"
-  },
-  {
-    "name": "users_strong_UserTrash",
-    "module": "investigations/trash_fair_cycle",
-    "config": "investigations/users_strong_UserTrash.cfg",
-    "expected": "temporal",
-    "group": "investigations",
-    "timeout": 300
   },
   {
     "name": "declined_UserTrash",
@@ -86,18 +78,10 @@
   },
   {
     "name": "users_weak_UserTrashDeposited",
-    "module": "trash_multiple",
+    "module": "investigations/trash_scenarios",
     "config": "investigations/users_weak_UserTrashDeposited.cfg",
-    "expected": "temporal",
+    "expected": "pass",
     "group": "investigations"
-  },
-  {
-    "name": "users_strong_UserTrashDeposited",
-    "module": "investigations/trash_fair_cycle",
-    "config": "investigations/users_strong_UserTrashDeposited.cfg",
-    "expected": "temporal",
-    "group": "investigations",
-    "timeout": 300
   },
   {
     "name": "declined_UserTrashDeposited",

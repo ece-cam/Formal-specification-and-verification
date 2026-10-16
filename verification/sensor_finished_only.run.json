@@ -5,12 +5,15 @@
   "expected": "assertion",
   "group": "investigations",
   "exitCode": 14,
-  "wallSeconds": 6.008,
+  "wallSeconds": 5.964,
   "timedOut": false,
   "expectedResultObserved": true,
-  "modelSha256": "d98fc92f5f85199a25d5d89c59b9d3643d13f57e98b06bc96a80bf05e837e5a1",
+  "modelSha256": "ff142544d80f2e4e43f9bdbd88450f6878a41bad2619efe6ebe51e549c6dcaa3",
   "configSha256": "0e23c0bcbf2444947813c47045298b4374e8b6d0602f34b9f84ec971a70a18ec",
   "dataSha256": "24f34044deadc6246204b892991a84e5a56c675ad05a78e3f091f524218c90a8",
+  "dependencies": {
+    "trash_data.tla": "24f34044deadc6246204b892991a84e5a56c675ad05a78e3f091f524218c90a8"
+  },
   "toolsSha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
   "command": [
     "C:\\Program Files (x86)\\Java\\jre1.8.0_503\\bin\\java.exe",

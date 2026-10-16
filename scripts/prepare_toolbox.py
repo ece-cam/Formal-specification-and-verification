@@ -14,7 +14,7 @@ for module, name, config in models:
     launch = ET.Element('launchConfiguration', type='org.lamport.tla.toolbox.tool.tlc.modelCheck')
     for key, value in [('configurationName', name), ('specName', module),
                        ('modelBehaviorSpec', 'Spec'), ('modelBehaviorInit', ''), ('modelBehaviorNext', ''),
-                       ('modelComments', 'See REPORT.md for expected Users liveness counterexamples.')]:
+                       ('modelComments', 'All required invariants, liveness properties and deadlock checking enabled.')]:
         ET.SubElement(launch, 'stringAttribute', key=key, value=value)
     for key, value in [('modelBehaviorSpecType', '1'), ('numberOfWorkers', '1'),
                        ('fpIndex', '0'), ('maxHeapSize', '25')]:
@@ -32,4 +32,5 @@ for module, name, config in models:
     directory.mkdir(exist_ok=True)
     ET.indent(launch)
     ET.ElementTree(launch).write(directory / f'{module}___{name}.launch', encoding='utf-8', xml_declaration=True)
-shutil.copyfile(ROOT / 'multiple_bins.cfg', ROOT / 'trash_multiple.cfg')
+if not (ROOT / 'trash_multiple.cfg').exists():
+    shutil.copyfile(ROOT / 'multiple_bins.cfg', ROOT / 'trash_multiple.cfg')

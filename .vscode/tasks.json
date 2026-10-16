@@ -2,21 +2,122 @@
   "version": "2.0.0",
   "tasks": [
     {
+      "label": "Assignment 2: verify required models",
+      "type": "process",
+      "command": "powershell.exe",
+      "args": [
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "${workspaceFolder}/scripts/verify.ps1",
+        "-Mode",
+        "all"
+      ],
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      },
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "Assignment 2: check Bins",
+      "type": "process",
+      "command": "powershell.exe",
+      "args": [
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "${workspaceFolder}/scripts/verify.ps1",
+        "-Check",
+        "multiple_bins"
+      ],
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      }
+    },
+    {
+      "label": "Assignment 2: check Users",
+      "type": "process",
+      "command": "powershell.exe",
+      "args": [
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "${workspaceFolder}/scripts/verify.ps1",
+        "-Check",
+        "multiple_users"
+      ],
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      }
+    },
+    {
+      "label": "Assignment 2: check Trucks",
+      "type": "process",
+      "command": "powershell.exe",
+      "args": [
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "${workspaceFolder}/scripts/verify.ps1",
+        "-Check",
+        "multiple_trucks"
+      ],
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      }
+    },
+    {
       "label": "Assignment 2: translate and verify complete suite",
       "type": "process",
       "command": "powershell.exe",
-      "args": ["-NoProfile", "-ExecutionPolicy", "Bypass", "-File", "${workspaceFolder}/scripts/verify.ps1", "-Mode", "suite"],
-      "group": { "kind": "test", "isDefault": true },
+      "args": [
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "${workspaceFolder}/scripts/verify.ps1",
+        "-Mode",
+        "suite"
+      ],
       "problemMatcher": [],
-      "presentation": { "reveal": "always", "panel": "dedicated" }
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      }
     },
     {
       "label": "Assignment 2: demonstrate why fairness is needed",
       "type": "process",
       "command": "powershell.exe",
-      "args": ["-NoProfile", "-ExecutionPolicy", "Bypass", "-File", "${workspaceFolder}/scripts/verify.ps1", "-Mode", "unfair"],
+      "args": [
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "${workspaceFolder}/scripts/verify.ps1",
+        "-Mode",
+        "unfair"
+      ],
       "problemMatcher": [],
-      "presentation": { "reveal": "always", "panel": "dedicated" }
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      }
     }
   ]
 }

@@ -31,6 +31,9 @@ for check in checks:
                         ('dataSha256', ROOT / 'trash_data.tla')]:
         if sha(path) != run[field]:
             raise RuntimeError(f'Stale verification for {check["name"]}: {path.name}')
+    for name, digest in run.get('dependencies', {}).items():
+        if sha(ROOT / name) != digest:
+            raise RuntimeError(f'Stale dependency for {check["name"]}: {name}')
     runs[check['name']] = run
 
 main_table = '| Configuration (B,U,T,C,M) | Distinct states | Wall time (s) | Outcome |\n'
@@ -38,7 +41,7 @@ main_table += '| --- | --- | --- | --- |\n'
 for name, label in [('trash_single', 'Single (1,1,1,7,4)'), ('multiple_bins', 'Bins (2,1,1,3,2)'),
                     ('multiple_users', 'Users (1,2,1,3,2)'), ('multiple_trucks', 'Trucks (2,1,2,2,1)')]:
     r = runs[name]
-    result = 'Two user liveness failures' if name == 'multiple_users' else 'All checks pass'
+    result = 'All checks pass'
     main_table += f'| {label} | {r["distinctStates"]:,} | {r["wallSeconds"]:.3f} | {result} |\n'
 r = runs['multiple_users_other']
 main_table += (f'\nThe additional complete Users safety/collection run visited {r["distinctStates"]:,} '
@@ -48,10 +51,8 @@ main_table += (f'\nThe additional complete Users safety/collection run visited {
 
 extra = '| Experiment | Visited states | Seconds | Observed result |\n| --- | --- | --- | --- |\n'
 labels = {
-    'users_weak_UserTrash': 'Users, weak fairness: UserTrash',
-    'users_weak_UserTrashDeposited': 'Users, weak fairness: deposited',
-    'users_strong_UserTrash': 'Strong-fair witness: UserTrash',
-    'users_strong_UserTrashDeposited': 'Strong-fair witness: deposited',
+    'users_weak_UserTrash': 'Process fairness only: UserTrash',
+    'users_weak_UserTrashDeposited': 'Process fairness only: deposited',
     'declined_UserTrash': 'Declined cards: UserTrash',
     'declined_UserTrashDeposited': 'Declined cards: deposited',
     'declined_other': 'Declined cards: other checks',
@@ -66,8 +67,7 @@ for name, label in labels.items():
     result = {'pass': 'Pass', 'temporal': 'Temporal counterexample', 'assertion': 'Assertion failure',
               'invariant:BelowFive': 'Invariant counterexample'}[expected]
     extra += f'| {label} | {r["distinctStates"]:,} | {r["wallSeconds"]:.3f} | {result} |\n'
-extra += ('\nCounterexample searches may stop before exhausting the reachable graph. The 178-state '
-          'strong-fairness results describe the restricted replay witness. All-pass experiments '
+extra += ('\nCounterexample searches may stop before exhausting the reachable graph. All-pass experiments '
           'exhaust their finite graphs. The four no-fairness experiments each visited '
           '5,286 distinct states and produced the expected temporal violation; their timings '
           'are recorded in the corresponding JSON files.\n')
@@ -168,7 +168,7 @@ def page_furniture(canvas, document):
     canvas.saveState()
     canvas.setFont('Helvetica', 8)
     canvas.setFillColor(colors.HexColor('#607384'))
-    canvas.drawString(44, 23, '2IX20 | Formal specification and verification | 15 October 2026')
+    canvas.drawString(44, 23, '2IX20 | Formal specification and verification | 16 October 2026')
     canvas.drawRightString(A4[0] - 44, 23, str(document.page))
     canvas.restoreState()
 
@@ -184,8 +184,11 @@ files = {ROOT / name for name in ('trash_data.tla', 'trash_bins.tla', 'trash_sin
 for check in checks:
     files.add(ROOT / (check['module'] + '.tla'))
     files.add(ROOT / check['config'])
-for directory in ('trash_single.toolbox', 'trash_multiple.toolbox'):
-    files.update((ROOT / directory).glob('*.launch'))
+for model in ('trash_single.toolbox/trash_single___Model_formal.launch',
+              'trash_multiple.toolbox/trash_multiple___Bins.launch',
+              'trash_multiple.toolbox/trash_multiple___Users.launch',
+              'trash_multiple.toolbox/trash_multiple___Trucks.launch'):
+    files.add(ROOT / model)
 archive = ROOT / 'assignment2-tla-project.zip'
 with zipfile.ZipFile(archive, 'w', zipfile.ZIP_DEFLATED) as zipped:
     for path in sorted(files):

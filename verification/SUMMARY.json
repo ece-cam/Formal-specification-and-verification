@@ -1,14 +1,14 @@
 {
-  "checks": 20,
+  "checks": 18,
   "allExpectedResultsObserved": true,
-  "pdfBytes": 24825,
-  "zipBytes": 45020,
-  "zipEntries": 33,
+  "pdfBytes": 26475,
+  "zipBytes": 43428,
+  "zipEntries": 30,
   "coreSourceHashes": {
+    "trash_bins.tla": "193a79468fe5383c0660bea8e3ec35247c45d40e1a625000ed89c901576a25a8",
+    "trash_multiple.tla": "a4ea0cb3c178118bef054044d8feb5fce3948aceca675abd9e4f227ffacde94d",
     "trash_data.tla": "24f34044deadc6246204b892991a84e5a56c675ad05a78e3f091f524218c90a8",
-    "trash_single.tla": "308e133a9f3f4082a9c800a716b83c252098573ce672b6535d3aa3f36b563ff7",
-    "trash_bins.tla": "cb01d20876c5f467bfb62b5bdd69b9be440227a6cc337801ef950408ad7ff6a6",
-    "trash_multiple.tla": "5f79873bebd93a210e4932d3e53ea2640a19a8692e7dd6603ba6fadc9faa1ff1"
+    "trash_single.tla": "308e133a9f3f4082a9c800a716b83c252098573ce672b6535d3aa3f36b563ff7"
   },
   "reflectionRequiresTeamInput": true
 }

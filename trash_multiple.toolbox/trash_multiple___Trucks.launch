@@ -5,7 +5,7 @@
   <stringAttribute key="modelBehaviorSpec" value="Spec" />
   <stringAttribute key="modelBehaviorInit" value="" />
   <stringAttribute key="modelBehaviorNext" value="" />
-  <stringAttribute key="modelComments" value="See REPORT.md for expected Users liveness counterexamples." />
+  <stringAttribute key="modelComments" value="All required invariants, liveness properties and deadlock checking enabled." />
   <intAttribute key="modelBehaviorSpecType" value="1" />
   <intAttribute key="numberOfWorkers" value="1" />
   <intAttribute key="fpIndex" value="0" />
@@ -28,6 +28,7 @@
     <listEntry value="1RamOuterDoor" />
     <listEntry value="1AuthorizedOpenOnly" />
     <listEntry value="1CollectionExclusive" />
+    <listEntry value="1AdmissionOK" />
   </listAttribute>
   <listAttribute key="modelCorrectnessProperties">
     <listEntry value="1TrashEmptied" />

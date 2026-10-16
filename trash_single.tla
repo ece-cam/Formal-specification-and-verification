@@ -391,12 +391,12 @@ end process;
 
 
 end algorithm; *)
-\* BEGIN TRANSLATION (chksum(pcal) = "532bab10" /\ chksum(tla) = "d4d10ccf")
-VARIABLES pc, outerDoorOpen, outerDoorLocked, trapDoorOpen, ramExtended, 
+\* BEGIN TRANSLATION (chksum(pcal) = "ab4a1bd1" /\ chksum(tla) = "204ac238")
+VARIABLES outerDoorOpen, outerDoorLocked, trapDoorOpen, ramExtended, 
           trashInTop, trashCompressed, trashUncompressed, trashCapacity, 
           trapDestroyed, userTrash, grantedUser, doorUser, binCommand, 
           binSensor, scans, permissions, serverRequests, serverResponses, 
-          truckCommand
+          truckCommand, pc
 
 (* define statement *)
 Trash == trashCompressed + trashUncompressed
@@ -483,11 +483,11 @@ TruckEmpties == truckCommand.command = "request" ~> truckCommand.command = "empt
 
 VARIABLES perm, req, currentScan, serverResponse, requestGranted
 
-vars == << pc, outerDoorOpen, outerDoorLocked, trapDoorOpen, ramExtended, 
+vars == << outerDoorOpen, outerDoorLocked, trapDoorOpen, ramExtended, 
            trashInTop, trashCompressed, trashUncompressed, trashCapacity, 
            trapDestroyed, userTrash, grantedUser, doorUser, binCommand, 
            binSensor, scans, permissions, serverRequests, serverResponses, 
-           truckCommand, perm, req, currentScan, serverResponse, 
+           truckCommand, pc, perm, req, currentScan, serverResponse, 
            requestGranted >>
 
 ProcSet == (Bins) \cup (Users) \cup {Server} \cup (Trucks) \cup {Control}

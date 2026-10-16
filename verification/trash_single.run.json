@@ -5,16 +5,20 @@
   "expected": "pass",
   "group": "single",
   "exitCode": 0,
-  "wallSeconds": 9.073,
+  "wallSeconds": 8.584,
   "timedOut": false,
   "expectedResultObserved": true,
   "modelSha256": "308e133a9f3f4082a9c800a716b83c252098573ce672b6535d3aa3f36b563ff7",
   "configSha256": "9e3693d0c47157551719f1ef8ed5febb8933884263b8139bbc511ee554b444d5",
   "dataSha256": "24f34044deadc6246204b892991a84e5a56c675ad05a78e3f091f524218c90a8",
+  "dependencies": {
+    "trash_data.tla": "24f34044deadc6246204b892991a84e5a56c675ad05a78e3f091f524218c90a8"
+  },
   "toolsSha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
   "command": [
-    "java",
+    "C:\\Program Files (x86)\\Java\\jre1.8.0_503\\bin\\java.exe",
     "-Xmx768m",
+    "-DTLA-Library=C:\\Users\\isikp\\Desktop\\Software Spec\\Formal-specification-and-verification",
     "-cp",
     "C:\\Users\\isikp\\Desktop\\Software Spec\\.tools\\tla-1.7.4\\tla2tools.jar",
     "tlc2.TLC",

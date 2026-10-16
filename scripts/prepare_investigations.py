@@ -39,6 +39,15 @@ StrongSpec == /\ Init /\ [][Next]_vars
               /\ SF_vars(serverProcess)
               /\ \A self \in Trucks: SF_vars(truckProcess(self))
               /\ SF_vars(controlProcess)
+
+\* Deliberately omit the strong fairness on the user close acknowledgement.
+ProcessWeakSpec ==
+  /\ Init /\ [][Next]_vars
+  /\ (\A b \in Bins: WF_vars(binProcess(b)))
+  /\ (\A u \in Users: WF_vars(userProcess(u)))
+  /\ WF_vars(serverProcess)
+  /\ (\A t \in Trucks: WF_vars(truckProcess(t)))
+  /\ WF_vars(controlProcess)
 '''
 (OUT / 'trash_scenarios.tla').write_text('''---------------- MODULE trash_scenarios ----------------
 EXTENDS trash_multiple
@@ -50,9 +59,8 @@ for prop in PROPERTIES:
     config('unfair_' + prop, 'trash_single', (1,1,1,7,4), [prop],
            spec=None, expected='temporal', group='unfair')
 for prop in ('UserTrash', 'UserTrashDeposited'):
-    config('users_weak_' + prop, 'trash_multiple', (1,2,1,3,2), [prop], expected='temporal')
-    config('users_strong_' + prop, 'investigations/trash_fair_cycle', (1,2,1,3,2), [prop],
-           spec='FairCycleSpec', expected='temporal')
+    config('users_weak_' + prop, 'investigations/trash_scenarios', (1,2,1,3,2), [prop],
+           spec='ProcessWeakSpec', expected='temporal' if prop == 'UserTrash' else 'pass')
     config('declined_' + prop, 'investigations/trash_scenarios', (2,1,1,3,2), [prop],
            expected='temporal', extra='CONSTANT ValidCard <- AnyCard\n')
 config('declined_other', 'investigations/trash_scenarios', (2,1,1,3,2), ['TrashEmptied', 'TruckEmpties'],

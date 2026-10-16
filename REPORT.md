@@ -2,7 +2,7 @@
 
 2IX20 Software Specification, 2026-2027 - Assignment 2
 
-Verification date: 15 October 2026. Team members: **[TO COMPLETE: two names and student numbers]**.
+Verification date: 16 October 2026. Team members: **[TO COMPLETE: two names and student numbers]**.
 
 ## Scope and model assumptions
 
@@ -82,15 +82,23 @@ The complete traces are `verification/unfair_<property>.log`. These are infinite
 
 ## 5.1 Multiple bins, users and trucks
 
-The multiple-bin template's arrays and per-user permission queues are retained. The controller uses the bin and user from each FIFO scan, routes the server request and reply consistently, and sends the permission only to that user's queue. The authorization histories are arrays indexed by bin. Bin commands and sensors are indexed by the selected bin; each truck owns its own command slot.
+The multiple-bin template's arrays and per-user permission queues are retained. The controller uses the bin and user from each FIFO scan, routes the server request and reply consistently, and sends permission only to that user's queue. Authorization histories are arrays indexed by bin. Each truck owns its own command slot.
 
-The controller serializes accepted deposit cycles, which keeps ownership simple and the state space manageable. Other users can still enqueue scans during a deposit. A complete deposit eventually releases the controller to handle the next scan. Truck processes run independently, and an outstanding collection never causes the controller to wait before processing another scan. Deposits in other available bins can therefore proceed while a truck travels or empties a bin. The model does not claim to process two accepted user deposits simultaneously.
+Accepted deposit cycles are serialized to keep ownership simple. Other users can enqueue scans during a deposit. Truck processes run independently, and an outstanding collection never blocks the controller from handling scans and returning a negative response for an unavailable bin. Deposits in other available bins can proceed while a truck travels or empties a bin. The model does not claim to execute two accepted deposits simultaneously.
 
-After compressing a deposit, the controller appends an operationally full bin to `pendingBins`. At `ControlNext`, if this queue is nonempty and a truck is idle, it assigns the oldest pending bin to the smallest-numbered idle truck, then removes the queue entry. Otherwise it processes the oldest scan. The FIFO collection queue prevents later full bins overtaking earlier requests; deterministic truck choice avoids unnecessary equivalent schedules. Multiple trucks can be assigned to different bins concurrently. No fairness guarantee is made that every individual idle truck is used equally often.
+After compression, an operationally full bin is appended to `pendingBins`. At `ControlNext`, the controller assigns the oldest pending bin to the smallest-numbered available truck before processing another scan. It does not await the resulting collection in that atomic step. The FIFO collection queue prevents overtaking; deterministic truck selection reduces unnecessary branching. Several trucks may work on different bins at once. No equal-utilization requirement is imposed on trucks.
 
-An assigned or queued bin is unavailable for access. The `CollectionExclusive` invariant checks that each pending bin occurs once, a queued bin is not already assigned, and two active trucks never have the same bin. These conditions prevent duplicate collection and competing hardware commands. A truck retains its bin identifier throughout the request-to-completion handshake. Its safety waits and command acknowledgements are the indexed versions of the single-bin protocol.
+An assigned or queued bin is unavailable for access. `CollectionExclusive` checks that each pending bin occurs once, no queued bin is already assigned, and active trucks never share a bin. A truck retains its bin identifier through the request-to-completion handshake. Its indexed hardware waits are the same as in the single-bin protocol.
 
-The controller only waits at `ControlNext` if both useful work sources are absent: there is no scan and no pending collection with an available truck. It does not use an unconditional idle loop to conceal deadlocks.
+To prevent user starvation, `admissionQueue[b]` stores valid declined users in FIFO order. A retry keeps the user's position. When capacity is available and collection has completed, only the head user may receive a grant; a successful grant removes that ticket. Later users receive negative responses and join the tail, without duplicate entries. A user changing bins cancels its old ticket, and a negative card validation cancels its ticket. `AdmissionOK` checks bounded queue lengths, no duplicates within a bin, and at most one bin reservation per user. This preserves prompt negative responses while retaining a fair admission order across retries.
+
+All processes use weak fairness. The label `UserAwaitClosedDoor:+` additionally imposes strong fairness only on that acknowledgement action. With several users, other commands can make the shared `finished` flag intermittently available. This localized fairness condition prevents a user who has deposited from waiting forever before generating new trash. Whole-process strong fairness is unnecessary. The supplied user's choices and hardware commands are unchanged.
+
+### Reproduced deadlock and repair
+
+The pre-repair model reached a real deadlock in the Bins configuration, recorded in `verification/deadlock_before_bins.log`. At final state 164, compressed trash is `<<0, 2>>`, `pendingBins = <<2>>`, the truck is idle (`emptied`), the user awaits permission for bin 2, and the controller is at `ControlAwaitBinReady`. Both bin processes and the server are also waiting. A truck is available, but no transition can execute.
+
+That label attempted to dispatch a truck and await readiness in the same PlusCal atomic step. An `await` guards the whole step; it cannot release the dispatcher so a truck can perform the collection needed to satisfy the wait. Adding process fairness cannot enable a disabled action. The final controller dispatches at `ControlNext`, returns a negative permission for an unavailable bin, and continues servicing scans. Admission tickets preserve user order without blocking dispatch. TLC now checks the entire repaired state graph with deadlock checking enabled for all three required configurations.
 
 ## 5.2 Generalized requirements
 
@@ -134,12 +142,12 @@ TLC ran with the course's TLA+ 1.7.4 JAR (the executable reports TLC 2.19), Java
 
 | Configuration (B,U,T,C,M) | Distinct states | Wall time (s) | Outcome |
 | --- | --- | --- | --- |
-| Single (1,1,1,7,4) | 5,286 | 9.073 | All checks pass |
-| Bins (2,1,1,3,2) | 31,364 | 38.393 | All checks pass |
-| Users (1,2,1,3,2) | 81,060 | 128.722 | Two user liveness failures |
-| Trucks (2,1,2,2,1) | 38,550 | 95.047 | All checks pass |
+| Single (1,1,1,7,4) | 5,286 | 8.584 | All checks pass |
+| Bins (2,1,1,3,2) | 31,364 | 41.653 | All checks pass |
+| Users (1,2,1,3,2) | 88,084 | 172.835 | All checks pass |
+| Trucks (2,1,2,2,1) | 38,550 | 66.753 | All checks pass |
 
-The additional complete Users safety/collection run visited 81,060 distinct states in 60.742 seconds. B, U and T are component counts; C is MaxCapacity and M is MaxUserTrash. Distinct-state counts do not include the multiplicity of temporal-checking branches.
+The additional complete Users safety/collection run visited 88,084 distinct states in 58.015 seconds. B, U and T are component counts; C is MaxCapacity and M is MaxUserTrash. Distinct-state counts do not include the multiplicity of temporal-checking branches.
 
 <!-- END MEASUREMENTS -->
 
@@ -150,28 +158,26 @@ The additional complete Users safety/collection run visited 81,060 distinct stat
 | RamOuterDoor | Pass | Pass | Pass | Pass |
 | AuthorizedOpenOnly | Pass | Pass | Pass | Pass |
 | TrashEmptied | Pass | Pass | Pass | Pass |
-| UserTrash | Pass | Pass | Fail | Pass |
-| UserTrashDeposited | Pass | Pass | Fail | Pass |
+| UserTrash | Pass | Pass | Pass | Pass |
+| UserTrashDeposited | Pass | Pass | Pass | Pass |
 | TruckEmpties | Pass | Pass | Pass | Pass |
 | All diagnostic invariants and assertions | Pass | Pass | Pass | Pass |
 
-All required properties are checked together in each primary run. For Users, `multiple_users_other.cfg` additionally checks every safety condition, deadlock freedom, `TrashEmptied` and `TruckEmpties` to completion; each failing user property is checked separately to obtain an unambiguous counterexample. The Users failures are investigated below, as requested by section 5.4; the assignment requires all properties to hold for Bins and Trucks.
+All required properties are checked together in each primary run, including Users. `multiple_users_other.cfg` also exhausts the same Users graph with every invariant, deadlock checking and the two collection properties enabled. No required main-model violation is classified as an expected outcome: each main run requires TLC to exit successfully with no error.
 
-Each primary configuration finishes within five minutes. Serializing accepted deposits, sharing one server exchange at a time, using a FIFO pending-collection queue, and selecting the smallest idle truck limit unnecessary state branching. The model still includes all original environmental nondeterminism. Adding more components or larger capacities can increase the graph substantially; the reported finite results are not an unbounded proof.
+Every primary configuration finishes within five minutes. Serializing accepted deposits, allowing only one server exchange at a time, using bounded FIFO queues and choosing the smallest idle truck limit branching. The model retains the original environmental choices. Strong fairness is limited to the intermittent close-acknowledgement action instead of every controller and user action. The Users graph contains 88,084 distinct states; its combined safety/liveness run completes in under three minutes on the measured machine. No state constraints, disabled deadlock checks or weakened requirement formulas are used to obtain these results. Larger configurations may still require substantially more resources.
 
 ## 5.4 Behaviour investigations
 
 ### Multiple users and starvation
 
-FIFO scan processing guarantees response order, not successful access. A declined request leaves the queue; its retry receives a new place. In `users_weak_UserTrashDeposited.log`, user 2 gets two units at state 11 and retains them forever. User 3 repeatedly deposits. At state 88 the hardware has emptied the bin, but its truck has not yet acknowledged completion. User 2's scan is declined at state 89 because the bin is still assigned. User 3's scan succeeds after the acknowledgement. The cycle repeats; the logged back-edge returns to state 93 after state 178. Both users, the controller, the server, the bin and the truck take steps in this cycle, but user 2 never reaches zero trash.
+Both `UserTrash` and `UserTrashDeposited` now hold for Users. FIFO scan processing alone would not guarantee this: a denied request leaves the scan queue and its retry goes to the back, allowing the same user to lose repeatedly. The final model retains a separate admission ticket across negative capacity responses. Other users cannot consume the next opening ahead of the head ticket. With the required single-bin Users configuration and always-valid cards, an earlier ticket eventually succeeds, and every waiting user advances. Truck collection remains independent of successful card scans.
 
-The weak-fairness `UserTrash` trace shows another scheduling issue: user 2 deposits at state 21, then remains at `UserAwaitClosedDoor` with zero trash while user 3 keeps using the bin. The shared `finished` flag repeatedly appears and is consumed by other commands. User 2's wait is enabled intermittently, not continuously, so weak fairness permits it never to observe the acknowledgement. The cycle is states 49-127. This violates the infinitely-often-positive conjunct. It is not an example of a lost FIFO scan.
+A separate scheduling issue remains relevant to fairness. After a deposit, a user awaits `binCommand.command = "finished"`. Other commands can repeatedly replace that shared flag, making this action enabled infinitely often without leaving it continuously enabled. Weak process fairness alone permits the user to remain at this acknowledgement with zero trash forever. The `users_weak_UserTrash` experiment removes only the additional label-level fairness by using `ProcessWeakSpec`; TLC reports this counterexample. Thus infinitely often having positive trash needs the stronger acknowledgement fairness. It is a liveness violation, not a deadlock.
 
-Strong process fairness would exclude that second cycle, but does not fix user progress in general. The first cycle, in which user 2 keeps receiving negative responses, schedules every process indefinitely. Process fairness does not require a favorable capacity/collection state whenever a particular scan is handled. Both `UserTrash` and `UserTrashDeposited` therefore still fail under strong fairness.
+Under the same process-weak specification, `UserTrashDeposited` passes: the admission queue ensures that a user who already has trash is eventually admitted. The problematic close acknowledgement occurs after the user's amount has already become zero. The final `Spec` adds `SF_vars(UserAwaitClosedDoor(u))` for each user, and both requirements then pass together in the unrestricted Users graph. No restricted replay witness is used for the final verification. Strong fairness of all processes would also suffice, but is more than is needed for this model.
 
-For reproducible evidence, `trash_fair_cycle.tla` replays the 178-state TLC deposit-starvation trace, looping to state 93. Its initialization is conjoined with the original `Init`, every edge is conjoined with the original `Next`, and strong fairness is imposed on the original process actions. TLC reports both temporal violations under these conditions. This is a restricted counterexample witness, not exhaustive strong-fairness verification of the whole graph. A direct whole-graph strong-fairness attempt exceeded the five-minute investigation timeout; replay avoids expensive cycle search while preserving every original transition and fairness condition.
-
-Adding bins or trucks does not guarantee progress: users can keep choosing the same bin, and extra trucks do not reserve access for the declined user. The same type of schedule can remain possible with unused extra resources. This is a reasoning argument about the protocol, not an additional exhaustive parameter sweep. A remedy would be to retain a validated request in a fair per-bin admission queue and reserve the next available opening for that user. That changes the current decline-and-retry policy and is not silently assumed in the reported model.
+Additional bins or trucks alone would not supply admission ordering or acknowledgement fairness. The model addresses those issues explicitly. The reported checks cover the three prescribed configurations, not every combination of arbitrary component counts.
 
 ### Nondeterministically declined cards
 
@@ -200,19 +206,17 @@ The separate `AtMostFive` run exhausts the modified graph and passes, together w
 
 | Experiment | Visited states | Seconds | Observed result |
 | --- | --- | --- | --- |
-| Users, weak fairness: UserTrash | 81,060 | 32.801 | Temporal counterexample |
-| Users, weak fairness: deposited | 81,060 | 57.732 | Temporal counterexample |
-| Strong-fair witness: UserTrash | 178 | 6.275 | Temporal counterexample |
-| Strong-fair witness: deposited | 178 | 6.282 | Temporal counterexample |
-| Declined cards: UserTrash | 13,653 | 9.180 | Temporal counterexample |
-| Declined cards: deposited | 12,124 | 9.042 | Temporal counterexample |
-| Declined cards: other checks | 40,596 | 36.622 | Pass |
-| Always-invalid card: safety | 48 | 6.074 | Pass |
-| Door wait uses finished only | 116 | 6.008 | Assertion failure |
-| Compressed amount < 5 | 2,694 | 6.191 | Invariant counterexample |
-| Compressed amount <= 5 | 6,628 | 6.319 | Pass |
+| Process fairness only: UserTrash | 88,084 | 24.032 | Temporal counterexample |
+| Process fairness only: deposited | 88,084 | 47.035 | Pass |
+| Declined cards: UserTrash | 13,463 | 9.119 | Temporal counterexample |
+| Declined cards: deposited | 14,373 | 9.006 | Temporal counterexample |
+| Declined cards: other checks | 40,596 | 34.960 | Pass |
+| Always-invalid card: safety | 48 | 5.951 | Pass |
+| Door wait uses finished only | 116 | 5.964 | Assertion failure |
+| Compressed amount < 5 | 2,735 | 6.095 | Invariant counterexample |
+| Compressed amount <= 5 | 5,192 | 6.173 | Pass |
 
-Counterexample searches may stop before exhausting the reachable graph. The 178-state strong-fairness results describe the restricted replay witness. All-pass experiments exhaust their finite graphs. The four no-fairness experiments each visited 5,286 distinct states and produced the expected temporal violation; their timings are recorded in the corresponding JSON files.
+Counterexample searches may stop before exhausting the reachable graph. All-pass experiments exhaust their finite graphs. The four no-fairness experiments each visited 5,286 distinct states and produced the expected temporal violation; their timings are recorded in the corresponding JSON files.
 
 <!-- END INVESTIGATION RESULTS -->
 
@@ -222,7 +226,7 @@ Counterexample searches may stop before exhausting the reachable graph. The 178-
 
 The review exposed a weak authorization formula: the existence of any valid user did not establish that the actual opener had permission. Explicit grant and opener history made this relationship checkable. The main concurrency difficulties were reserving a bin until the truck acknowledges completion, avoiding duplicate truck assignments, and distinguishing a door-close event from an arbitrary command acknowledgement.
 
-The investigations also distinguish request handling from starvation freedom and process scheduling fairness from fairness of nondeterministic choices. Counterexamples are necessary evidence here: a completed response to every scan does not imply eventual successful access. A separate upper-bound check was needed for the maximum-compression question; reaching five alone would not establish that six is impossible. Reproducible scripts and recorded hashes connect these claims to the exact submitted models.
+The investigations also distinguish request handling from starvation freedom and process scheduling fairness from fairness of nondeterministic choices. Counterexamples are necessary evidence here: a completed response to every scan does not imply eventual successful access. The deadlock repair also demonstrated why a command and a wait for its eventual effect must not share one atomic step. Admission tickets and localized acknowledgement fairness make both Users progress requirements hold. A separate upper-bound check was needed for the maximum-compression question; reaching five alone would not establish that six is impossible. Reproducible scripts and recorded hashes connect these claims to the exact submitted models.
 
 ### Team reflection - requires the team's own factual account
 
@@ -241,8 +245,8 @@ This draft was prepared with OpenAI Codex. The following describes the observabl
 | --- | --- |
 | 4.1-4.2 | Reviewed the existing controller/truck; retained their protocol, added response matching and the collection-completion admission guard, and drafted the explanation. |
 | 4.3-4.4 | Replaced the weak authorization formula with grant/opener history, retained the other requirement forms, ran TLC and no-fairness experiments, and drafted the results. |
-| 5.1-5.3 | Implemented the multiple-bin controller/truck, FIFO collection queue and generalized properties; created configurations and ran the required TLC checks. |
-| 5.4 | Generated isolated experiments and a strong-fairness replay witness, inspected counterexamples, and derived and checked the compressed-trash bound. |
+| 5.1-5.3 | Implemented the controller/truck and FIFO collection queue; repaired the reproduced deadlock, added FIFO admission tickets and acknowledgement fairness, and reran all prescribed configurations. |
+| 5.4 | Regenerated the isolated experiments for the repaired model, checked the need for acknowledgement fairness, inspected counterexamples, and verified the compressed-trash bound. The earlier replay witness was retired. |
 | 6.2 and packaging | Drafted the technical reflection and this disclosure, generated the PDF and ZIP; left personal contributions and group discussions for the team. |
 
 The model checker supplied the verification outcomes; AI-generated explanations do not substitute for those runs. The original supplied environment and data definitions were retained apart from observational authorization assignments and fairness declarations. The sensor replacement and nondeterministic-card policy are investigation variants, not production changes. **[TO COMPLETE: the team's own per-section kept/edited/rejected decisions and any additional tools used.]**
